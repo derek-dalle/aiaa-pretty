@@ -154,7 +154,7 @@
 \NeedsTeXFormat{LaTeX2e}
 
 % This command gives the name of the class.
-\ProvidesClass{aiaa-dd}[2010/01/10 v1.0 AIAA paper]
+\ProvidesClass{../../tex/aiaa-dd}[2010/01/10 v1.0 AIAA paper]
 
 % These two lines define three new logical variables.
 % The names of the logical variables are \@aiaa@conference, \@aiaa@submit, and \@aiaa@journal.
@@ -219,6 +219,9 @@
 \RequirePackage{fancyhdr}   % simple control of headers and footers
 \RequirePackage{subfigure}  % package for subfloats
 \RequirePackage{times}      % changes font to Times New Roman
+\RequirePackage{amsmath}    % AMS packages
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
 \if@aiaa@submit
   \RequirePackage{setspace} % control line spacing
 \fi
@@ -485,7 +488,9 @@
                                          {-1em}%
                                          {\normalfont\normalfont}}
 % Use correct citation style.
-\renewcommand{\@biblabel}[1]{$^{#1}$}
+\if@aiaa@conference
+  \renewcommand{\@biblabel}[1]{$^{#1}$}
+\fi
 \renewenvironment{thebibliography}[1]%
      {\section*{\refname\@mkboth{\MakeUppercase\refname}%
                                  {\MakeUppercase\refname}}%
