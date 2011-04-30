@@ -400,7 +400,12 @@
    \vskip 2.5em %
   \fi\fi\fi %
  \end{center} %
+ % Produce the author footnotes.
  \@thanks %
+ % Restart the footnotes (Don't count the 'thanks' information.).
+ \setcounter{footnote}{0} %
+ % This changes footnotes to letters instead of numbers.
+ \renewcommand\thefootnote{\@alph\c@footnote}
 }
 
 % This section distinguishes between the two-column and one-column options.
