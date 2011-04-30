@@ -141,6 +141,7 @@
 \newif\if@q@papernumber
 \newif\if@q@conference
 \newif\if@q@lastpage
+\newif\if@q@lastpage@link
 
 % This value can be used to hide any AIAA labels.
 \newif\if@q@plain
@@ -156,19 +157,24 @@
 
 % This sets up any of the above variables that should default to true.
 \@pdf@linkstrue
+\@q@lastpagetrue
 
 % Document format options
 \DeclareOption{conference}{\@aiaa@conferencetrue}
 \DeclareOption{submit}{\@aiaa@submittrue}
-\DeclareOption{journal}{\@aiaa@journaltrue}
+\DeclareOption{journal}{\@aiaa@journaltrue\@q@lastpagefalse}
 % Option to hide footers
 \DeclareOption{plain}{\@q@plaintrue}
 % Option to compress document
 \DeclareOption{compress}{\@q@compresstrue}
 % Option to use backward references for references
 \DeclareOption{backrefs}{\@q@backreftrue}
-% Option to put a link to the last page on every page.
+% Option to put the number of pages on each page.
 \DeclareOption{lastpage}{\@q@lastpagetrue}
+% Option to not put the number of pages on each page.
+\DeclareOption{lastpage=false}{\@q@lastpagefalse}
+% Option to make the number of pages a link to the last page.
+\DeclareOption{lastpage=link}{\@q@lastpage@linktrue}
 % Option to not use any PDF features
 \DeclareOption{dvi}{\@q@dvitrue\@pdf@linksfalse}
 % Options to change the colors of the links
@@ -404,22 +410,124 @@
  \@thanks %
  % Restart the footnotes (Don't count the 'thanks' information.).
  \setcounter{footnote}{0} %
- % This changes footnotes to letters instead of numbers.
- \renewcommand\thefootnote{\@alph\c@footnote}
+ % Set the footnote symbol to letters.
+ \renewcommand\thefootnote{\@alph\c@footnote} %
 }
 
 % This section distinguishes between the two-column and one-column options.
-\if@aiaa@journal
+\if@aiaa@journal %
  % For a journal, use two-column format except for the title and abstract.
- \renewcommand{\maketitle}{
+ \renewcommand{\maketitle}{ %
   % Two-column title area
-  \twocolumn[\@maketitle]
+  \twocolumn[\@maketitle] %
   % Remove extra headers and footers from titlepage.
-  \thispagestyle{plain}\saythanks}
+  \thispagestyle{plain} %
+  % This is needed to print the footnotes.
+  \saythanks %
+  % Reset the footnote style.
+  \renewcommand\thefootnote{\@alph\c@footnote}}
 \else
  % Insert the title area as part of the whole one-column document.
  \renewcommand{\maketitle}{\@maketitle}
 \fi
 
 
+%% ----- HEADER AND FOOTER -----------------------------------------------------
+% Whether or not there is a footer label to show
+\newif\if@q@footer@label
+% Commands to hide or show footer label
+\newcommand{\showfooterlabel}{\@q@footer@labeltrue}
+\newcommand{\hidefooterlabel}{\@q@footer@labelfalse}
+% Command to hold the value of the footer
+\newcommand{\@aiaa@footer@label}{ %
+ American Institute of Aeronautics and Astronautics}
+% Command to set it
+\newcommand{\footerlabel}[1]{ %
+ \renewcommand{\@aiaa@footer@label}{#1} \showfooterlabel}
+% Command to insert it
+\newcommand{\insertfooterlabel}{\@aiaa@footer@label}
 
+% Set the default value of the footer label.
+\if@q@plain
+\else
+ \footerlabel{American Institute of Aeronautics and Astronautics}
+\fi
+
+% Command to hold the value of the page reference
+\newcommand{\@pagenum}{}
+% Command to reset the page reference value
+\newcommand{\@refresh@pagenum}{ %
+ \if@q@lastpage
+  % Check if links are turned on.
+  \if@pdf@links
+   % Check if the option for last-page links is on.
+   \if@q@lastpage@link
+    % Link to last page
+    \renewcommand{\@pagenum}{\thepage~of \pageref{LastPage}}
+   \else
+    % Last page but no link
+    \renewcommand{\@pagenum}{\thepage~of \pageref*{LastPage}}
+   \fi
+  \else
+   % Last page but no links in document
+   \renewcommand{\@pagenum}{\thepage~of \pageref{LastPage}}
+  \fi
+ \else
+  % Nothing at all about last page
+  \renewcommand{\@pagenum}{\thepage}
+ \fi}
+% Run this command
+\@refresh@pagenum
+% Command to get rid of last page.
+\newcommand{\hidelastpage}{\@q@lastpagefalse\@refresh@pagenum}
+% Command to show last page.
+\newcommand{\showlastpage}{\@q@lastpagetrue\@refresh@pagenum}
+% Command to show last page and link it.
+\newcommand{\linklastpage}{ %
+ \@q@lastpagetrue\@q@lastpage@linktrue %
+ \@refresh@pagenum}
+
+
+% This section sets up the footer.
+\if@aiaa@journal
+ % This eliminates the line at the top of pages.
+ \renewcommand{\headrulewidth}{0pt}
+ % This redefines the "plain" page style, which is used on the first page.
+ \fancypagestyle{plain}{ %
+  % First clear out the regular page style
+  \fancyhf{} %
+  % Put the title of the journal in the upper left.
+  \fancyhead[L]{\scshape\@journal} %
+  % Put the page number (1) in the bottom center
+  \fancyfoot[C]{\thepage}} %
+ % Clear the page style for all other pages.
+ \fancyhf{} %
+ % Page number on upper outer corner
+ \fancyhead[RE,LO]{\footnotesize\@pagenum} %
+ % Authors' last names on top center
+ \fancyhead[CE,CO]{\footnotesize\MakeUppercase{\insertshortauthor}}
+\else
+ % This clears out the regular page style.
+ \fancyhf{} %
+ % This turns off the line at the top of pages.
+ \renewcommand{\headrulewidth}{0pt} %
+ % This sets the value of the footer for each page.
+ \cfoot{
+  % Set the font size and type.
+  \footnotesize\normalfont
+  % Check for a last page reference.
+  \@pagenum \\
+  % Check if there is a footer label.
+  \if@q@footer@label %
+   % Put a small vertical under the page number.
+   \rule[.2\baselineskip]{0.5in}{0.2pt} \\ %
+   % Insert the footer label.
+   \insertfooterlabel %
+  \fi } %
+\fi
+% This tells LaTeX to actually use the customized page style.
+\pagestyle{fancy}
+
+
+
+\RequirePackage{hyperref}
