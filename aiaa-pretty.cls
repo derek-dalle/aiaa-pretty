@@ -1,3 +1,6 @@
+% I dedicate this template unto thee, Sara C. Spangelous.
+%
+%
 %%
 %% This is file `aiaa-pretty.cls'.  It is based off of aiaa-tc.cls, which was
 %% written by Bil Kleb, Bill Wood, and Erich Knauseberger.
@@ -7,38 +10,8 @@
 %%
 %% -----------------------------------------------------------------------------
 %% IMPORTANT USE GUIDELINES:
-%% For best results, use the new commands \AIAAauthor and \AIAAabstract.
-%% Although it is possible to mimic all of the formatting options provided by
-%% this file using the old commands (\author, \begin{abstract}, \end{abstract}),
-%% using these new commands will allow you to switch between the various formats
-%% by only changing one word in the first line of your .tex file.  The one word
-%% is the option passed to this class.  For example switching beween the
-%% two-column format, which shows approximately how your article will look in
-%% print to the submission format according to AIAA guidelines means only making
-%% the following change.
 %%
-%%    \documentclass[journal]{aiaa-dd}  -->  \documentclass[submit]{aiaa-dd}
 %%
-%% Below is an example that shows how to use the \AIAAauthor and \AIAAabstract
-%% commands and how this relates to the standard LaTeX information.
-%%
-%% OLD:
-%%   \author{Derek J. Dalle and Sean M. Torrez}
-%%   \maketitle 
-%%   \begin{abstract}
-%%     ... text ... (formatting allowed)
-%%   \end{abstract}
-%%
-%% NEW (recommended):
-%%   \AIAAauthor[Dalle and Torrez]{Derek J. Dalle and Sean M. Torrez}
-%%   \AIAAabstract{
-%%     ... text ... (formatting still allowed)
-%%   }
-%%   \maketitle
-%%
-%% -----------------------------------------------------------------------------
-%%
-%% 
 %% This provides a template for AIAA papers.
 %% 
 %% This software is released under the terms of the LaTeX Project Public
@@ -136,71 +109,130 @@
 %%
 %%
 
+%% ----- INITIAL DEFINITIONS ---------------------------------------------------
 % This prevents the compiler from running on old versions of LaTeX.
 \NeedsTeXFormat{LaTeX2e}
 
 % This command gives the name of the class.
-\ProvidesClass{../../tex/aiaa-pretty}[2010/01/10 v1.0 AIAA paper]
+\ProvidesClass{aiaa-pretty}[2010/01/10 v2.0 AIAA paper]
 
-% These two lines define three new logical variables.
-% The names of the logical variables are \@aiaa@conference, \@aiaa@submit, and \@aiaa@journal.
-% The default values are false.
+
+%% ----- OPTIONS ---------------------------------------------------------------
+% LaTeX help: logical variables
+% Create a new logical variable using
+%   \newif\if@something
+% This creates a variable \@something with a default of false.
+
+% These variables control the document type.
 \newif\if@aiaa@conference
 \newif\if@aiaa@submit
 \newif\if@aiaa@journal
+\newif\if@aiaa@plain
 
-% This section is for processing options given to the aiaa-dd class.
-% The first two lines work by setting the logical variables defined above accordingly.
+% These variables control which items to show.
+\newif\if@q@abstract
+\newif\if@q@author
+\newif\if@q@shortauthor
+\newif\if@q@title
+\newif\if@q@footer
+\newif\if@q@header
+\newif\if@q@backref
+\newif\if@q@copyright
+\newif\if@q@papernumber
+\newif\if@q@conference
+\newif\if@q@lastpage
+
+% This value can be used to hide any AIAA labels.
+\newif\if@q@plain
+
+% These variables relate to the hyperref links.
+\newif\if@pdf@links
+\newif\if@pdf@plain
+\newif\if@pdf@bright
+\newif\if@q@dvi
+
+% This option allows the user to compress the entire document.
+\newif\if@q@compress
+
+% This sets up any of the above variables that should default to true.
+\@pdf@linkstrue
+
+% Document format options
 \DeclareOption{conference}{\@aiaa@conferencetrue}
 \DeclareOption{submit}{\@aiaa@submittrue}
 \DeclareOption{journal}{\@aiaa@journaltrue}
+% Option to hide footers
+\DeclareOption{plain}{\@q@plaintrue}
+% Option to compress document
+\DeclareOption{compress}{\@q@compresstrue}
+% Option to use backward references for references
+\DeclareOption{backrefs}{\@q@backreftrue}
+% Option to put a link to the last page on every page.
+\DeclareOption{lastpage}{\@q@lastpagetrue}
+% Option to not use any PDF features
+\DeclareOption{dvi}{\@q@dvitrue\@pdf@linksfalse}
+% Options to change the colors of the links
+\DeclareOption{links=false}{\@pdf@linksfalse}
+\DeclareOption{links=plain}{\@pdf@plaintrue}
+\DeclareOption{links=bright}{\@pdf@brighttrue}
+
 % This passes any other options on to the article class.
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}%
-                \typeout{Unknown option: passing ``\CurrentOption"
-                         option on to the standard LaTeX article class.}}
+ \typeout{Unknown option: passing '\CurrentOption'
+  option on to the standard LaTeX article class.}}
+
 % This command appears to tell LaTeX to simply process the class options.
 \ProcessOptions
 
+
+%% ----- DOCUMENT FORMAT -------------------------------------------------------
 % This control structure calls the basic LaTeX article.cls class.
-% The base font size should be 10pt unless using the submit option.
 \if@aiaa@submit
+ % Submit class: large font and spacing in single column
  \LoadClass[letterpaper,12pt]{article}
+ % Make sure that other formats are suppressed.
+ \@aiaa@conferencefalse \@aiaa@journalfalse \@aiaa@plainfalse
 \else\if@aiaa@journal
+ % Journal class: mirror the appearance of an AIAA journal article
  \LoadClass[letterpaper,10pt,twoside]{article}
 \else
+ % Conference class: format appropriate for AIAA conference paper
  \LoadClass[letterpaper,10pt]{article}
 \fi\fi
 
 % Change the base font size for journal papers.
-% This is bit of a mystery, but see 
-% texmf/tex/latex/base/size10.clo for comparison.
-% This is not perfectly calibrated to AIAA journal typesetting.
-% In the text produced using these options, the characters are
-% too small, and the spacing between lines is too big.  Note
-% however that the secondary text sizes seem to match those
-% produced by size10.clo.
 \if@aiaa@journal
-  \renewcommand\normalsize{%
-   \@setfontsize\normalsize\@ixpt\@xipt%
-   \abovedisplayskip 8\p@ \@plus4\p@ \@minus4\p@
-   \abovedisplayshortskip \z@ \@plus3\p@
-   \belowdisplayshortskip 5\p@ \@plus3\p@ \@minus3\p@
-   \belowdisplayskip \abovedisplayskip
-   \let\@listi\@listI}
-  \normalsize
+ % Must change the \normalisize command
+ \renewcommand\normalsize{%
+  % This does the main resizing work.
+  % The first number is the size of the text.
+  % The second number is the size of the line.
+  \@setfontsize\normalsize\@ixpt\@xpt%
+  % Set the amount of vertical white space before and after equations.
+  \abovedisplayskip 8\p@ \@plus4\p@ \@minus4\p@
+  \belowdisplayskip 8\p@ \@plus4\p@ \@minus4\p@
+  \abovedisplayshortskip \z@ \@plus3\p@
+  \belowdisplayshortskip 5\p@ \@plus3\p@ \@minus3\p@
+  % I do not know what this means.
+  \let\@listi\@listI
+ }
 \fi
 
 % This class uses the geometry.sty package to set the margins.
-% The margins are very small for the journal version.
 \if@aiaa@journal
-  \RequirePackage[margin=2cm,bottom=1.3cm,footskip=8pt,headsep=0.4cm,%
-                  headheight=\baselineskip]{geometry}
-  % This sets the distance between columns.
-  \setlength{\columnsep}{0.75cm}
+ % The margins are very small for the journal version.
+ \RequirePackage[margin=2cm,bottom=1.3cm,footskip=8pt,headsep=0.4cm,%
+  headheight=\baselineskip]{geometry}
+ % This sets the distance between columns.
+ \setlength{\columnsep}{0.75cm}
 \else
-  \RequirePackage[margin=1in,top=0.75in,headheight=\baselineskip]{geometry}
+ % Larger margins for conference class
+ \RequirePackage[margin=1in,top=0.75in,bottom=0.9in, %
+  headheight=0.5\baselineskip]{geometry}
 \fi
 
+
+%% ----- PACKGAGES -------------------------------------------------------------
 % This section tells LaTeX to call a bunch of other packages.
 \RequirePackage{graphicx}   % images
 \RequirePackage{array}      % extra row height
@@ -208,335 +240,181 @@
 \RequirePackage{fancyhdr}   % simple control of headers and footers
 \RequirePackage{subfigure}  % package for subfloats
 \RequirePackage{times}      % changes font to Times New Roman
+\RequirePackage{verbatim}   % New verbatim format
+\RequirePackage{textcomp}   % proper single quotes in verbatim
+\RequirePackage{ifthen}     % logical structure
 \RequirePackage{amsmath}    % AMS packages
 \RequirePackage{amsfonts}
 \RequirePackage{amssymb}
-\if@aiaa@submit
-  \RequirePackage{setspace} % control line spacing
-\fi
-\if@aiaa@journal
-  \RequirePackage{abstract} % use for generating thanks footnotes with twocolumn
-\fi
 
-% Here are some commands that add AIAA labels to papers.
-\newcommand*{\AIAApapernumber}[1]{\def\aiaa@papernumber{#1}}\AIAApapernumber{}
-\newcommand*{\AIAAconference}[1]{\def\aiaa@conference{#1}}\AIAAconference{}
-\newcommand*{\AIAAcopyright}[1]{\def\aiaa@copyright{#1}}\AIAAcopyright{}
-\newcommand*{\AIAAsubmitinfo}[1]{\def\aiaa@submitinfo{#1}}\AIAAsubmitinfo{}
-% This gives a command to insert the name of the journal.
-\newcommand*{\AIAAjournal}[1]{\def\aiaa@journal{#1}}\AIAAjournal{}
-% This gives the new way of entering the abstract.
-\newcommand{\AIAAabstract}[1]{
-  % Declare a new variable.
-  \def\aiaa@abstract{#1}
-    \if@aiaa@journal
-      % Extra vertical space after the abstract
-      \def\insertabstract{\aiaa@abstract\vspace{0.9cm}}
-    \else
-      % Single-column options
-      \def\insertabstract{\aiaa@abstract}
-    \fi
-}\AIAAabstract{}
+% Need a package to set 1.5-spaced lines for 'submit'
+\if@aiaa@submit\RequirePackage{setspace}\fi
+% Need a package to fix the author footnotes in two-column format
+\if@aiaa@journal\RequirePackage{abstract}\fi
 
-% This creates a new method of inserting the author information.
-\newcommand{\AIAAauthor}[2][]{%
-  % This tells LaTeX about the author.
-  \def\@author{#2}
-  \def\aiaa@author{#2}
-  % This gives an optional short version of the author's name.
-  \def\aiaa@shortauthor{#1}
-  % Check if there is anything in the author field.
-  \ifx\aiaa@author\@empty
-    % No insertions
-    \def\insertauthor{}
-    \def\insertshortauthor{}
-  \else
-    % Non-void insertions
-    \def\insertauthor{\aiaa@author}
-    \ifx\aiaa@shortauthor\@empty
-      \def\insertshortauthor{\aiaa@author}
-    \else
-      \def\insertshortauthor{\aiaa@shortauthor}
-    \fi
-  \fi
-}\AIAAauthor{}
 
-% This just sets the dimensions of some spacings,
-% and I really don't understand it.
-\setlength{\intextsep}{0.7\baselineskip \@plus 2\p@ \@minus 1\p@}
+%% ----- IDENTIFIERS AND ABSTRACT ----------------------------------------------
+% Variables that hold the value of various identifiers.
+\renewcommand{\@author}{}
+\newcommand{\@shortauthor}{}
+\newcommand{\@abstract}{}
+\renewcommand{\@title}{}
+\newcommand{\@copyright}{}
+\newcommand{\@submitinfo}{}
+\newcommand{\@conference}{}
+\newcommand{\@journal}{}
 
-% Try to put figures close to where they're placed in the .tex file.
-\def\fps@figure{htbp}
-\def\fps@table{htbp}
-
-% Copyright commands.
-\newcommand{\AIAAcopyrightA}[1]{Copyright \copyright\ #1 by the
-  American Institute of Aeronautics and Astronautics, Inc. All
-  rights reserved.}% rev 01/01/2002
-\newcommand{\AIAAcopyrightB}[2]{Copyright \copyright\ #1 by
-  #2. Published by the American Institute of Aeronautics
-  and Astronautics, Inc.\ with permission.}% rev 01/01/2002
-\newcommand{\AIAAcopyrightC}{This material is declared a work of the U.S.
-  Government and is not subject to copyright protection in the
-  United States.}% rev 01/01/2002
-\newcommand{\AIAAcopyrightD}[1]{Copyright \copyright\ #1 by the American
-  Institute of Aeronautics and Astronautics, Inc.  The U.S. Government
-  has a royalty-free license to exercise all rights under the copyright
-  claimed herein for Governmental purposes. All other rights are
-  reserved by the copyright owner.}% rev 01/01/2002
-\newcommand{\AIAAcopyrightDAPL}[1]{Copyright \copyright\ #1 by the American
-  Institute of Aeronautics and Astronautics, Inc.  Under the copyright
-  claimed herein, the U.S. Government has a royalty-free license to
-  exercise all rights for Governmental purposes. All other rights are
-  reserved by the copyright owner.}% rev 01/01/2002
-% This command formats the actual footnote.
-\newcommand\aiaa@makecopyright{%
-  \begingroup
-   \renewcommand\thefootnote{}
-   \if@aiaa@conference\footnotetext{\aiaa@copyright}\fi
-  \endgroup
+% New author command
+\renewcommand*{\author}[2][]{ %
+ % Set the main author field.
+ \renewcommand{\@author}{#2} %
+ % Set a flag to use it.
+ \@q@authortrue %
+ % Check for an optional argument.
+ \ifthenelse{\equal{#1}{}}{}{ %
+  % Set the short author field.
+  \renewcommand{\@shortauthor}{#1} %
+  % Set a flag to use it.
+  \@q@shortauthortrue %
+ } %
 }
+% Command to set just the short author.
+\newcommand{\shortauthor}[1]{ %
+ \renewcommand{\@shortauthor}{#1} %
+ \@q@shortauthortrue}
+% Legacy command
+\let\AIAAauthor\author
+
+% New abstract command
+\renewcommand{\abstract}[1]{ %
+ \renewcommand{\@abstract}{} %
+ \@q@abstracttrue}
+% Legacy command
+\let\AIAAabstract\abstract
+
+% New title command
+\renewcommand{\title}[1]{ %
+ \renewcommand{\@title}{#1} %
+ \@q@titletrue}
+% Legacy command
+\let\AIAAtitle\title
+
+% New abstract command
+\renewcommand{\abstract}[1]{
+ \renewcommand{\@abstract}{#1}\@q@abstracttrue}
+% Legacy command
+\let\AIAAabstract\abstract
+
 % These are counters for the author affiliations.
 \newcounter{aiaa@cthanks}
 \newcounter{aiaa@cfootnote}
 % This command enables multiple authors to have the same footnote hook.
 \newcommand{\thanksibid}[1]{%
-  \begingroup
-    \setcounter{aiaa@cfootnote}{\value{footnote}}% store original
-    \setcounter{aiaa@cthanks}{#1}%
-    \renewcommand\thefootnote{\fnsymbol{aiaa@cthanks}}%
-    \footnotemark %
-    \setcounter{footnote}{\value{aiaa@cfootnote}}% reset to original
-  \endgroup
+ \begingroup
+  % Store the current value of the footnote counter.
+  \setcounter{aiaa@cfootnote}{\value{footnote}} %
+  % Set the thanks counter to the argument
+  \setcounter{aiaa@cthanks}{#1} %
+  % Get the footnote symbol corresponding to above
+  \renewcommand\thefootnote{\fnsymbol{aiaa@cthanks}} %
+  % Make a footnote.
+  \footnotemark %
+  % Reset the footnote counter to the original value.
+  \setcounter{footnote}{\value{aiaa@cfootnote}} %
+ \endgroup %
 }
 
-% This section of code defines the AIAA title area.
-% This section also formats the abstract.
-\newcommand{\aiaa@maketitle}{\par
-  \begingroup
-    \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
-    \def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}%
-    \long\def\@makefntext##1{\parindent 1em\noindent
-            \hb@xt@1.8em{%
-                \hss\@textsuperscript{\normalfont\@thefnmark}}##1}%
-    \newpage
-    \global\@topnum\z@   % Prevents figures from going at top of page.
-    \@maketitle
-    % After creating the title, this section of the code prints the abstract.
-    % The user specifies the abstract by using \AIAAabstract.
-    \ifx\aiaa@abstract\@empty
-      % Check for two-column format
-      \if@aiaa@journal
-        % Add white space between author and text.
-        \vskip 1.2em
-      \else
-        % Delete white space between author and text.
-        \vskip -0.5em
-      \fi
-    \else
-      % Actually insert the abstract.
-      \begin{center}
-      \begin{minipage}[t]{13.5cm}
-        \bfseries\small
-        \insertabstract
-      \end{minipage}
-      \end{center}
-    \fi
-    \@thanks
-  \endgroup
-  % Restart the footnotes (Don't count the 'thanks' information.).
-  \setcounter{footnote}{0}
-  % This changes footnotes to letters instead of numbers.
-  \renewcommand\thefootnote{\@alph\c@footnote}
-  \aiaa@makecopyright
-  \global\let\thanks\relax
-  \global\let\thanksibid\relax
-  \global\let\maketitle\relax
-  \global\let\@maketitle\relax
-  \global\let\@thanks\@empty
-  \global\let\@author\@empty
-  \global\let\@date\@empty
-  \global\let\@title\@empty
-  \global\let\title\relax
-  \global\let\author\relax
-  \global\let\date\relax
-  \global\let\and\relax
+
+% Commands to insert the identifiers
+\newcommand{\insertauthor}{\@author}
+\newcommand{\insertshortauthor}{\@shortauthor}
+\newcommand{\inserttitle}{\@title}
+\newcommand{\insertabstract}{\@abstract}
+
+
+%% ----- FLOATS ----------------------------------------------------------------
+% This sets the distance between a float and the paragraph.
+\setlength{\intextsep}{0.7\baselineskip \@plus 2\p@ \@minus 1\p@}
+
+% This sets the priorization for where floats should go.
+\renewcommand{\fps@figure}{htbp}
+\renewcommand{\fps@table}{htbp}
+
+
+%% ----- COPYRIGHT -------------------------------------------------------------
+
+
+
+
+
+%% ----- TITLE AREA ------------------------------------------------------------
+% Define a new command that does most of the work of making the title.
+\renewcommand{\@maketitle}{ %
+ % Housekeeping
+ \newpage %
+ % Change the footnote style to silly marks.
+ \renewcommand\thefootnote{\@fnsymbol\c@footnote} %
+ % Insert the information in a centered environment
+ \begin{center} %
+  % Initial vertical space
+  \vskip1em %
+  % Set the footnote command equal to the thanks command.
+  \let\footnote\thanks %
+  % Check for a title
+  \if@q@title %
+   {\LARGE \bfseries \inserttitle} %
+  \fi %
+  % Check for an author field.
+  \if@q@author %
+   % Title-to-author gap
+   \if@q@title \vskip 0.8cm \fi %
+   % Insert the author.
+   { %
+    % Increase font size for all fields of author.
+    \large %
+    % Insert author in a tabular environment.
+    \begin{tabular}[t]{c}\insertauthor\end{tabular}
+   } %
+  \fi %
+  % Check for an abstract.
+  \if@q@abstract %
+   % Check which gap to insert above.
+   \if@q@author %
+    % Author-to-abstract skip
+    \vskip 3em %
+   \else\if@q@title %
+    % Title-to-abstract skip
+    \vskip 2.5em %
+   \fi\fi %
+   % Insert the abstract
+   \begin{minipage}{13.5cm} %
+    \bfseries \small \insertabstract %
+   \end{minipage} %
+   % Abstract-to-text gap
+   \vskip 3em %
+  \else\if@q@author %
+   % Author-to-text gap
+   \vskip 3em %
+  \else\if@q@title %
+   %Title-to-text gap
+   \vskip 2.5em %
+  \fi\fi\fi %
+ \end{center} %
+ \@thanks %
 }
 
 % This section distinguishes between the two-column and one-column options.
 \if@aiaa@journal
-  % For a journal, use two-column format except for the title and abstract.
-  \renewcommand{\maketitle}{
-    % Two-column title area
-    \twocolumn[\aiaa@maketitle]
-    % Remove extra headers and footers from titlepage.
-    \thispagestyle{plain}\saythanks}
+ % For a journal, use two-column format except for the title and abstract.
+ \renewcommand{\maketitle}{
+  % Two-column title area
+  \twocolumn[\@maketitle]
+  % Remove extra headers and footers from titlepage.
+  \thispagestyle{plain}\saythanks}
 \else
-  % Insert the title area as part of the whole one-column document.
-  \renewcommand{\maketitle}{\aiaa@maketitle}
+ % Insert the title area as part of the whole one-column document.
+ \renewcommand{\maketitle}{\@maketitle}
 \fi
 
-% This gives the formatting for the title.
-\def\@maketitle{
-  % Housekeeping
-  \newpage
-  \null
-  % Insert information in centered environment.
-  \begin{center}%
-  % This part inserts the conference name if present.
-  \if@aiaa@conference
-    {\sffamily\scriptsize\aiaa@conference}
-    \vskip1em
-  \else
-    \vskip\baselineskip
-    \vskip1em
-  \fi
-  % Something to make the author footnotes work
-  \let \footnote \thanks
-  % Title insertion
-  {
-    % Use bold and two size larger
-    \LARGE\bfseries
-    % Move the title closer to the top for a journal.
-    \if@aiaa@journal\vskip -2em\fi
-    % Insert the title.
-    \@title \par
-  }
-  % Put a gap between the title and the authors.
-  \vskip 0.8cm%
-  % Author insertion
-  {
-    % Use one font size larger.
-    \large
-    % Insert the author.
-    \begin{tabular}[t]{c}
-      \@author
-    \end{tabular}\par}
-  \end{center}
-  % Extra spacing between author and abstract
-  \par
-  \vskip 1.5ex
-}
-
-% Clear the default headers and footers.
-\fancyhf{}
-
-% This section sets up the footer.
-\if@aiaa@journal
-  % This redefines the "plain" page style, which is used on the first page.
-  \fancypagestyle{plain}{%
-    \fancyhf{}
-    \fancyhead[L]{\scshape\aiaa@journal}
-    \fancyfoot[C]{\thepage}}
-  % This generates the standard header for the other pages.
-  \renewcommand{\headrulewidth}{0pt}
-  % Page number on upper outer corner
-  \fancyhead[RE,LO]{\thepage}
-  % Authors' last names on top center
-  \fancyhead[CE,CO]{\scshape\insertshortauthor}
-\else
-  \renewcommand{\headrulewidth}{0pt}% turn off default headrule
-  \cfoot{\footnotesize\normalfont
-       \thepage\ of \pageref{LastPage}\\
-       \rule[.2\baselineskip]{0.5in}{0.2pt}\\
-       \if@aiaa@submit
-        \aiaa@submitinfo
-       \else
-        American Institute of Aeronautics and Astronautics
-        \ifx\aiaa@papernumber\@empty
-          \relax
-        \else
-          \if@aiaa@conference Paper \aiaa@papernumber\fi
-        \fi
-       \fi}
-\fi
-% This command simply tells LaTeX to use these headers and footers.
-\pagestyle{fancy}
-\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
-\setlength{\extrarowheight}{2pt}
-
-% Change the figure caption styles.
-\long\def\@makecaption#1#2{%
-  \vskip\abovecaptionskip
-  \sbox\@tempboxa{\footnotesize\bfseries #1.~~#2}%
-  \ifdim \wd\@tempboxa >\hsize
-    \footnotesize\bfseries #1.~~#2\par
-  \else
-    \global \@minipagefalse
-    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
-  \fi
-  \vskip\belowcaptionskip}
-\setlength\belowcaptionskip{5pt plus 1pt minus 1pt}
-% Change the subfigure label. 
-\def\thesubfigure{\alph{subfigure})}
-
-% Re-define the common subfloat macro
-\renewcommand\subcapfont@s {\bfseries}
-\renewcommand\subcaplabelfont@s {\bfseries}
-
-% Update section numbering.
-\renewcommand\thesection      {\@Roman\c@section}
-\renewcommand\thesubsection   {\@Alph\c@subsection}
-\renewcommand\thesubsubsection{\@arabic\c@subsubsection}
-\renewcommand\theparagraph    {\@alph\c@paragraph}
-\renewcommand\thesubparagraph {\@roman\c@subparagraph}
-\setcounter{secnumdepth}{3}% no counters \paragraph and below
-\def\@seccntformat#1{\csname the#1\endcsname.\quad}
-
-% This gives formatting rules for section headers.
-\renewcommand\section{%
-  \@startsection {section}{1}{\z@}%
-  {3.5ex \@plus -1ex \@minus -.2ex}%
-  {2.3ex \@plus.2ex}%
-  {\center\normalfont\large\bfseries}}
-
-% This gives formatting rules for subsection headers.
-\renewcommand\subsection{%
-  \@startsection{subsection}{2}{\z@}%
-  {-3.25ex\@plus -1ex \@minus -.2ex}%
-  {1.5ex \@plus .2ex}%
-  {\normalfont\normalsize\bfseries}}
-
-% This gives formatting rules for subsubsection headers.
-\renewcommand\subsubsection{%
-  \@startsection{subsubsection}{3}{\z@}%
-  {-3.25ex\@plus -1ex \@minus -.2ex}%
-  {1.5ex \@plus .2ex}%
-  {\normalfont\normalsize\itshape}}
-
-% If you are silly enough to use paragraphs with headings, this controls them.
-\renewcommand\paragraph{%
-  \@startsection{paragraph}{4}{\z@}%
-  {2.25ex \@plus1ex \@minus.2ex}%
-  {-1em}%
-  {\normalfont\normalsize\scshape}}
-
-% Formatting for subparagraphs.
-\renewcommand\subparagraph{%
-  \@startsection{subparagraph}{5}{\parindent}%
-  {2.25ex \@plus1ex \@minus .2ex}%
-  {-1em}%
-  {\normalfont\normalfont}}
-
-% Set extra line spacing for 'submit' option.
-\AtBeginDocument{
-  \if@aiaa@submit
-    \onehalfspacing
-  \fi
-}
 
 
-% This loads a package that allows extra colors for links.
-\RequirePackage[usenames,dvipsnames]{color}
-% Custom color for references.
-\definecolor{DarkGreen}{rgb}{0,0.6,0}
-
-% This will make labels and references hyperlinks.
-\RequirePackage[pdftex,pagebackref=true]{hyperref}
-% This controls some settings that affect the appearance of links.
-\hypersetup{
-  colorlinks=true,
-  pdfstartview={FitH},
-  citecolor=DarkGreen,
-  linkcolor=Maroon
-}

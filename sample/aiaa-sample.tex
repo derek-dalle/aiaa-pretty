@@ -1,0 +1,50 @@
+% Use the temporary template.
+\documentclass[conference]{../aiaa-pretty}
+
+% Author information
+\author[Dalle, Torrez, and Driscoll]{ %
+Derek J. Dalle\thanks{Graduate Research Assistant, Department of Aerospace Engineering, AIAA Student Member, \texttt{dalle@umich.edu}},
+Sean M. Torrez\thanks{Graduate Research Assistant, Department of Aerospace Engineering, AIAA Student Member, \texttt{smtorrez@umich.edu}},
+James F. Driscoll\thanks{Professor, Department of Aerospace Engineering, AIAA Fellow, \texttt{jamesfd@umich.edu}}\\
+\textit{\small{University of Michigan, Ann Arbor, MI 48109}}}
+
+% Title
+\title{Nozzles and Something Scramjet}
+
+% Abstract
+ \abstract{ %
+  This paper will say something about nozzles and SAMURI.  I have to put a really long thing in here so that the abstract will show up in a way that demonstrates the formatting properly.  That means that it has to be about four lines or something.  There really should not be a problem.  Plug nozzles are pretty good.  Scramjet nozzles are not exactly the same as aerospike nozzles because that would require turning the flow a large amount \textit{a priori}.}
+
+% Begin the document
+\begin{document}
+% Insert the title.
+\maketitle 
+
+\section{Introduction}
+Many texts, for example \cite{chapra:2002:numerics}, have chapters on this subject.  We are motivated\footnote{Testing the footnote} to develop an accurate model for scramjet nozzles that runs in less than one second on a modern desktop computer.
+\begin{equation}
+x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}
+\end{equation}
+Now we can see how the spacing works.
+
+\section{Conclusions}                            \label{sec:conclusion}
+A reduced-order two-dimensional model was developed that can analyze shock waves, expansion fans, and finite-rate chemistry.  The model was found to be particularly accurate in determining the boundary of the exhaust plume, which is essential to thrust calculations.  Recombination can also be modeled as long as the flow is well-mixed before reaching the nozzle.  However, the importance of recombination to thrust calculations was debatable, even for a set of conditions specifically selected to emphasize the importance of recombination.
+
+The model does not have the capability to analyze boundary layers, which were found to play an important role.  The boundary layer had a noticeable effect on all quantities except for pressure.  These results make a strong case that a boundary layer model must be added to the reduced-order model.
+
+\begin{figure}[!h]
+ \begin{center}
+  Whatever
+ \end{center}
+ \caption{Test figure}
+\end{figure}
+
+\section*{Acknowledgements}
+This research was supported by AFRL grant FA 8650-07-2-3744  for the MACCCS (Michigan AFRL Collaborative Center for Control Science).
+
+% References
+\bibliographystyle{aiaa}
+\bibliography{./bib/aiaa-sample}
+
+
+\end{document}
