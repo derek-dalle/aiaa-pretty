@@ -62,6 +62,18 @@ a_{n+1}&=s_n & b_{n+1}&=b_n
 Of course, if $f(s_n)=0$, we terminate the algorithm because $s_n$ is an exact solution.  Any algorithm that follows this outline is called a bracketing method, which is the main subject of this paper.
 
 \section{Numerical Techniques}
+Two functions that satisfy the assumptions for a bracketing method are shown in Fig.~\ref{fig:f:plain}.  The example in Fig.~\ref{fig:f:2} is particularly difficult to solve because the function has very little gradient information away from the root.
+
+\begin{figure}
+ \centering
+ \subfloat[\label{fig:f:1}Type 1 challenge] %
+  {\includegraphics[width=3.05in]{./pics/f1_plain.pdf}}
+ \subfloat[\label{fig:f:2}Type 2 challenge] %
+  {\includegraphics[width=3.05in]{./pics/f2_plain.pdf}}
+ \caption{ \label{fig:f:plain}
+  Two examples of functions that satisfy the bracketing assumptions}
+\end{figure}
+
 
 \subsection{Convergence Criteria}
 Figure \ref{fig:f:tol} gives a visualization for the uncertainty in both axes for several iterations of a bracketing scheme.  The yellow circles represent the iterative upper and lower bounds for the root location, and the sequentially darker orange boxes represent the current estimate of the region in which the root must exist.  Of course, we know that the root must lie on the $x$-axis, but the height of the box still gives a good representation of how good the current estimate is.
@@ -75,8 +87,9 @@ Figure \ref{fig:f:tol} gives a visualization for the uncertainty in both axes fo
 
 
 
+
+
 \section{Results}
-\insertshortauthorupper
 
 \section{Conclusions}                            \label{sec:conclusion}
 A reduced-order two-dimensional model was developed that can analyze shock waves, expansion fans, and finite-rate chemistry.  The model was found to be particularly accurate in determining the boundary of the exhaust plume, which is essential to thrust calculations.  Recombination can also be modeled as long as the flow is well-mixed before reaching the nozzle.  However, the importance of recombination to thrust calculations was debatable, even for a set of conditions specifically selected to emphasize the importance of recombination.

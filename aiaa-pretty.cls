@@ -244,11 +244,11 @@
 \RequirePackage{array}      % extra row height
 \RequirePackage{lastpage}   % to get reference for last page number
 \RequirePackage{fancyhdr}   % simple control of headers and footers
-\RequirePackage{subfigure}  % package for subfloats
 \RequirePackage{times}      % changes font to Times New Roman
 \RequirePackage{verbatim}   % New verbatim format
 \RequirePackage{textcomp}   % proper single quotes in verbatim
 \RequirePackage{ifthen}     % logical structure
+\RequirePackage{subfig}     % subfigures
 \RequirePackage{amsmath}    % AMS packages
 \RequirePackage{amsfonts}
 \RequirePackage{amssymb}
@@ -339,12 +339,44 @@
 
 
 %% ----- FLOATS ----------------------------------------------------------------
+% This introduces the capability to use a single parenthesis for subfloats.
+\DeclareCaptionLabelSeparator{paren}{) }
+% Set the font for subfloat captions
+\captionsetup[subfloat]{ %
+ % This makes the subcaptions bold.
+ font={footnotesize,bf}, %
+ % This eliminates both parentheses around the subfloat label.
+ labelformat=simple, %
+ % This uses a right parenthisis as a separator.
+ labelsep=paren}
+
+
 % This sets the distance between a float and the paragraph.
 \setlength{\intextsep}{0.7\baselineskip \@plus 2\p@ \@minus 1\p@}
 
 % This sets the priorization for where floats should go.
 \renewcommand{\fps@figure}{htbp}
 \renewcommand{\fps@table}{htbp}
+
+% Shorten the length below the caption
+\setlength\belowcaptionskip{5pt plus 1pt minus 1pt}
+% Change the figure caption styles.
+\renewcommand{\@makecaption}[2]{%
+ % Space between caption and figure
+ \vskip\abovecaptionskip %
+ % Actual caption insertion
+ \sbox\@tempboxa{\footnotesize\bfseries #1.~~#2} %
+ \ifdim \wd\@tempboxa >\hsize
+  \footnotesize\bfseries #1.~~#2\par
+ \else
+  \global \@minipagefalse
+  \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+ \fi
+ % Space between caption and next object
+ \vskip\belowcaptionskip}
+% Change the subfigure label. 
+%\def\thesubfigure{\alph{subfigure})}
+
 
 
 %% ----- COPYRIGHT -------------------------------------------------------------
