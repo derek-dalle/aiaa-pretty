@@ -147,16 +147,15 @@
 \newif\if@q@plain
 
 % These variables relate to the hyperref links.
-\newif\if@pdf@links
-\newif\if@pdf@plain
-\newif\if@pdf@bright
-\newif\if@q@dvi
+\newif\if@q@links
+\newif\if@links@plain
+\newif\if@links@bright
 
 % This option allows the user to compress the entire document.
 \newif\if@q@compress
 
 % This sets up any of the above variables that should default to true.
-\@pdf@linkstrue
+\@q@linkstrue
 \@q@lastpagetrue
 
 % Document format options
@@ -175,12 +174,10 @@
 \DeclareOption{lastpage=false}{\@q@lastpagefalse}
 % Option to make the number of pages a link to the last page.
 \DeclareOption{lastpage=link}{\@q@lastpage@linktrue}
-% Option to not use any PDF features
-\DeclareOption{dvi}{\@q@dvitrue\@pdf@linksfalse}
 % Options to change the colors of the links
-\DeclareOption{links=false}{\@pdf@linksfalse}
-\DeclareOption{links=plain}{\@pdf@plaintrue}
-\DeclareOption{links=bright}{\@pdf@brighttrue}
+\DeclareOption{links=false}{\@q@linksfalse}
+\DeclareOption{links=plain}{\@links@plaintrue}
+\DeclareOption{links=bright}{\@links@brighttrue}
 
 % This passes any other options on to the article class.
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}%
@@ -491,7 +488,7 @@
 \newcommand{\@refresh@pagenum}{ %
  \if@q@lastpage
   % Check if links are turned on.
-  \if@pdf@links
+  \if@q@links
    % Check if the option for last-page links is on.
    \if@q@lastpage@link
     % Link to last page
@@ -561,5 +558,107 @@
 \pagestyle{fancy}
 
 
+%% ----- SECTION HEADERS -------------------------------------------------------
+% Update section numbering.
+\renewcommand\thesection      {\@Roman\c@section}
+\renewcommand\thesubsection   {\@Alph\c@subsection}
+\renewcommand\thesubsubsection{\@arabic\c@subsubsection}
+\renewcommand\theparagraph    {\@alph\c@paragraph}
+\renewcommand\thesubparagraph {\@roman\c@subparagraph}
+% No counters \paragraph and below
+\setcounter{secnumdepth}{3}
+% This confusing command puts a period after the section numbers.
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname.\quad}
 
-\RequirePackage{hyperref}
+% This gives formatting rules for section headers.
+\renewcommand\section{%
+ \@startsection {section}{1}{\z@}%
+  {3.5ex \@plus -1ex \@minus -.2ex}%
+  {2.3ex \@plus.2ex}%
+  {\center\normalfont\large\bfseries}}
+
+% This gives formatting rules for subsection headers.
+\renewcommand\subsection{%
+ \@startsection{subsection}{2}{\z@}%
+  {-3.25ex\@plus -1ex \@minus -.2ex}%
+  {1.5ex \@plus .2ex}%
+  {\normalfont\normalsize\bfseries}}
+
+% This gives formatting rules for subsubsection headers.
+\renewcommand\subsubsection{%
+ \@startsection{subsubsection}{3}{\z@}%
+  {-3.25ex\@plus -1ex \@minus -.2ex}%
+  {1.5ex \@plus .2ex}%
+  {\normalfont\normalsize\itshape}}
+
+% If you are silly enough to use paragraphs with headings, this controls them.
+\renewcommand\paragraph{%
+ \@startsection{paragraph}{4}{\z@}%
+  {2.25ex \@plus1ex \@minus.2ex}%
+  {-1em}%
+  {\normalfont\normalsize\scshape}}
+
+% Formatting for subparagraphs.
+\renewcommand\subparagraph{%
+ \@startsection{subparagraph}{5}{\parindent}%
+  {2.25ex \@plus1ex \@minus .2ex}%
+  {-1em}%
+  {\normalfont\normalfont}}
+
+
+%% ----- LINKS -----------------------------------------------------------------
+% Check if links should be loaded at all
+\if@q@links
+ % Load the link package.
+ \if@q@backref
+  % Load the package with backwards references for bibliography.
+  \RequirePackage[pagebackref=true,colorlinks=true]{hyperref}
+ \else
+  % No back references
+  \RequirePackage[colorlinks=true]{hyperref}
+ \fi
+ % Check the colors of the links that should be used.
+ \if@links@plain
+  % Use all black links.
+  \hypersetup{
+   citecolor=black,
+   linkcolor=black,
+   filecolor=black,
+   urlcolor=blue}
+ \else\if@links@bright
+  % Use bright colors for the links
+  \hypersetup{urlcolor=cyan}
+ \else
+  % This loads a package that allows extra colors for links.
+  \RequirePackage[usenames,dvipsnames]{color}
+  % Custom color for references.
+  \definecolor{DarkGreen}{rgb}{0,0.6,0}
+  % Use more muted colors.
+  \hypersetup{
+   citecolor=DarkGreen,
+   linkcolor=Maroon,
+   urlcolor=blue,
+   filecolor=black}
+ \fi
+  % This loads a package that allows extra colors for links.
+ % \RequirePackage[usenames,dvipsnames]{color}
+  % Custom color for references.
+%  \definecolor{DarkGreen}{rgb}{0,0.6,0}
+ % This controls some settings that affect the appearance of links.
+
+
+
+%% ----- BEGIN DOCUMENT AREA ---------------------------------------------------
+% List of actions to take after the document has begun.
+\AtBeginDocument{ %
+ % Commands for the 'submit' format.
+ \if@aiaa@submit %
+  % 1.5-spaced lines
+  \onehalfspacing %
+ \fi %
+ % Set the PDF title.
+ % We have to wait until here to make sure the user has set the title.
+ \if@q@links
+  \hypersetup{pdftitle=\inserttitle}
+ \fi
+}
