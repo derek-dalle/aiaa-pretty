@@ -245,7 +245,7 @@
 \RequirePackage{verbatim}   % New verbatim format
 \RequirePackage{textcomp}   % proper single quotes in verbatim
 \RequirePackage{ifthen}     % logical structure
-\RequirePackage{subfig}     % subfigures
+\RequirePackage[BF,bf]{subfigure}     % subfigures
 \RequirePackage{amsmath}    % AMS packages
 \RequirePackage{amsfonts}
 \RequirePackage{amssymb}
@@ -336,17 +336,10 @@
 
 
 %% ----- FLOATS ----------------------------------------------------------------
-% This introduces the capability to use a single parenthesis for subfloats.
-\DeclareCaptionLabelSeparator{paren}{) }
-% Set the font for subfloat captions
-\captionsetup[subfloat]{ %
- % This makes the subcaptions bold.
- font={footnotesize,bf}, %
- % This eliminates both parentheses around the subfloat label.
- labelformat=simple, %
- % This uses a right parenthisis as a separator.
- labelsep=paren}
-
+% This eliminates the parentheses around the sublabel in references.
+\renewcommand{\thesubfigure}{\alph{subfigure}}
+% This formats the actual label area for each subfigure.
+\renewcommand{\@thesubfigure}{\alph{subfigure})\hskip\subfiglabelskip}
 
 % This sets the distance between a float and the paragraph.
 \setlength{\intextsep}{0.7\baselineskip \@plus 2\p@ \@minus 1\p@}
@@ -371,10 +364,7 @@
  \fi
  % Space between caption and next object
  \vskip\belowcaptionskip}
-% Change the subfigure label. 
-%\def\thesubfigure{\alph{subfigure})}
-
-
+ 
 
 %% ----- COPYRIGHT -------------------------------------------------------------
 
@@ -639,12 +629,8 @@
    linkcolor=Maroon,
    urlcolor=blue,
    filecolor=black}
- \fi
-  % This loads a package that allows extra colors for links.
- % \RequirePackage[usenames,dvipsnames]{color}
-  % Custom color for references.
-%  \definecolor{DarkGreen}{rgb}{0,0.6,0}
- % This controls some settings that affect the appearance of links.
+ \fi\fi
+\fi
 
 
 
@@ -659,6 +645,8 @@
  % Set the PDF title.
  % We have to wait until here to make sure the user has set the title.
  \if@q@links
-  \hypersetup{pdftitle=\inserttitle}
+  \hypersetup{
+   pdfstartview={FitH},
+   pdftitle=\inserttitle}
  \fi
 }
