@@ -203,28 +203,10 @@
  \LoadClass[letterpaper,10pt]{article}
 \fi\fi
 
-% Change the base font size for journal papers.
-\if@aiaa@journal
- % Must change the \normalisize command
- \renewcommand\normalsize{%
-  % This does the main resizing work.
-  % The first number is the size of the text.
-  % The second number is the size of the line.
-  \@setfontsize\normalsize\@ixpt\@xpt%
-  % Set the amount of vertical white space before and after equations.
-  \abovedisplayskip 8\p@ \@plus4\p@ \@minus4\p@
-  \belowdisplayskip 8\p@ \@plus4\p@ \@minus4\p@
-  \abovedisplayshortskip \z@ \@plus3\p@
-  \belowdisplayshortskip 5\p@ \@plus3\p@ \@minus3\p@
-  % I do not know what this means.
-  \let\@listi\@listI
- }
-\fi
-
 % This class uses the geometry.sty package to set the margins.
 \if@aiaa@journal
  % The margins are very small for the journal version.
- \RequirePackage[margin=2cm,bottom=1.3cm,footskip=8pt,headsep=0.4cm,%
+ \RequirePackage[margin=1.5cm,bottom=1.1cm,footskip=8pt,headsep=0.4cm,%
   headheight=\baselineskip]{geometry}
  % This sets the distance between columns.
  \setlength{\columnsep}{0.75cm}
@@ -327,7 +309,6 @@
  \endgroup %
 }
 
-
 % Commands to insert the identifiers
 \newcommand{\insertauthor}{\@author}
 \newcommand{\insertshortauthor}{\@shortauthor}
@@ -366,13 +347,115 @@
  \vskip\belowcaptionskip}
  
 
-%% ----- COPYRIGHT -------------------------------------------------------------
+%% ----- LENGTHS AND SIZES -----------------------------------------------------
+% Vertical spaces for the title area
+\newlength{\toptitleskip}
+\newlength{\titleauthorskip}
+\newlength{\titleabstractskip}
+\newlength{\authorabstractskip}
+\newlength{\titletextskip}
 
+% Set the lengths of the title area skips
+\setlength{\toptitleskip}{1ex}
+\setlength{\titleauthorskip}{5ex}
+\setlength{\titleabstractskip}{5ex}
+\setlength{\authorabstractskip}{5ex}
+\setlength{\titletextskip}{5ex plus 2pt minus 3pt}
 
+% Command to make the skips in the title area smaller.
+\newcommand{\compresstitle}{ %
+ \setlength{\toptitleskip}{-1ex plus 2ex}
+ \setlength{\titleauthorskip}{2ex}
+ \setlength{\titleabstractskip}{2ex}
+ \setlength{\authorabstractskip}{2ex}
+ \setlength{\titletextskip}{3ex plus 2pt minus 3pt}
+}
 
+% Command to make the section skips smaller.
+\newcommand{\compresssections}{ %
+ % This gives formatting rules for section headers.
+ \renewcommand\section{%
+  \@startsection {section}{1}{\z@}%
+   {0.1ex \@plus -1ex \@minus -.2ex}%
+   {0.7ex \@plus.2ex}%
+   {\center\normalfont\large\bfseries}}
+ % This gives formatting rules for subsection headers.
+ \renewcommand\subsection{%
+  \@startsection{subsection}{2}{\z@}%
+   {-5.25ex\@plus -1ex \@minus -.2ex}%
+   {0.5ex \@plus .2ex}%
+   {\normalfont\normalsize\bfseries}}
+}
+
+% Command to set the font size to 9 with normal spacing
+% It is necessary because there is no 9pt option for article.
+\newcommand{\journalfont}{ %
+ % This does the main font resizing work.
+ \renewcommand\normalsize{ %
+  % The first number is the size of the text.
+  % The second number is the size of the line.
+  \@setfontsize\normalsize\@ixpt\@xpt%
+  % Set the amount of vertical white space before and after equations.
+  \abovedisplayskip 8\p@ \@plus4\p@ \@minus4\p@
+  \belowdisplayskip 8\p@ \@plus4\p@ \@minus4\p@
+  \abovedisplayshortskip \z@ \@plus3\p@
+  \belowdisplayshortskip 5\p@ \@plus3\p@ \@minus3\p@
+  % I do not know what this means.
+  \let\@listi\@listI
+ }
+ % The small size needs tweaking, too
+ \renewcommand\small{%
+  % Decrease the font size to 8pt.
+  \@setfontsize\small\@viiipt{9.5}%
+  % Decrease the margins above and below equations.
+  \abovedisplayskip 6\p@ \@plus2\p@ \@minus4\p@
+  \abovedisplayshortskip \z@ \@plus\p@
+  \belowdisplayshortskip 3\p@ \@plus\p@ \@minus2\p@
+  % I still don't know what this means.
+  \def\@listi{\leftmargin\leftmargini
+   \topsep 3\p@ \@plus\p@ \@minus\p@
+   \parsep 2\p@ \@plus\p@ \@minus\p@
+   \itemsep \parsep} %
+ }
+}
+
+% Command to set the font size to 9 with tight spacing
+% It is necessary because there is no 9pt option for article.
+\newcommand{\smallfonts}{ %
+ % This does the main font resizing work.
+ \renewcommand\normalsize{ %
+  % The first number is the size of the text.
+  % The second number is the size of the line.
+  \@setfontsize\normalsize\@ixpt\@ixpt%
+  % Set the amount of vertical white space before and after equations.
+  \abovedisplayskip 4\p@ \@plus4\p@ \@minus2\p@
+  \belowdisplayskip 4\p@ \@plus4\p@ \@minus2\p@
+  \abovedisplayshortskip \z@ \@plus3\p@
+  \belowdisplayshortskip 3\p@ \@plus3\p@ \@minus2\p@
+  % I do not know what this means.
+  \let\@listi\@listI
+ }
+ % The small size needs tweaking, too
+ \renewcommand\small{%
+  % Decrease the font size to 8pt.
+  \@setfontsize\small\@viiipt{9}%
+  % Decrease the margins above and below equations.
+  \abovedisplayskip 3\p@ \@plus2\p@ \@minus1\p@
+  \abovedisplayshortskip \z@ \@plus\p@
+  \belowdisplayshortskip 2\p@ \@plus\p@ \@minus\p@
+  % I still don't know what this means.
+  \def\@listi{\leftmargin\leftmargini
+   \topsep 3\p@ \@plus\p@ \@minus\p@
+   \parsep 2\p@ \@plus\p@ \@minus\p@
+   \itemsep \parsep} %
+ }
+}
 
 
 %% ----- TITLE AREA ------------------------------------------------------------
+\newcommand{\tskrp}{5ex}
+%\setlength\titleauthorskip{12ex plus 2pt minus 3pt}
+
 % Define a new command that does most of the work of making the title.
 \renewcommand{\@maketitle}{ %
  % Housekeeping
@@ -382,7 +465,7 @@
  % Insert the information in a centered environment
  \begin{center} %
   % Initial vertical space
-  \vskip1em %
+  \vskip\toptitleskip %
   % Set the footnote command equal to the thanks command.
   \let\footnote\thanks %
   % Check for a title
@@ -392,13 +475,13 @@
   % Check for an author field.
   \if@q@author %
    % Title-to-author gap
-   \if@q@title \vskip 0.8cm \fi %
+   \if@q@title \vskip\titleauthorskip \fi %
    % Insert the author.
    { %
     % Increase font size for all fields of author.
-    \large %
+    \large\sloppy %
     % Insert author in a tabular environment.
-    \begin{tabular}[t]{c}\insertauthor\end{tabular}
+    \hfill\begin{tabular}[t]{c}\insertauthor\end{tabular}\hfill
    } %
   \fi %
   % Check for an abstract.
@@ -406,23 +489,23 @@
    % Check which gap to insert above.
    \if@q@author %
     % Author-to-abstract skip
-    \vskip 3em %
+    \vskip\authorabstractskip %
    \else\if@q@title %
     % Title-to-abstract skip
-    \vskip 2.5em %
+    \vskip\titleabstractkip %
    \fi\fi %
    % Insert the abstract
    \begin{minipage}{13.5cm} %
     \bfseries \small \insertabstract %
    \end{minipage} %
    % Abstract-to-text gap
-   \vskip 3em %
+   \vskip\titletextskip %
   \else\if@q@author %
    % Author-to-text gap
-   \vskip 3em %
+   \vskip\titletextskip %
   \else\if@q@title %
    %Title-to-text gap
-   \vskip 2.5em %
+   \vskip\titletextskip %
   \fi\fi\fi %
  \end{center} %
  % Produce the author footnotes.
@@ -564,14 +647,14 @@
 \renewcommand\section{%
  \@startsection {section}{1}{\z@}%
   {3.5ex \@plus -1ex \@minus -.2ex}%
-  {2.3ex \@plus.2ex}%
+  {1.0ex \@plus.2ex}%
   {\center\normalfont\large\bfseries}}
 
 % This gives formatting rules for subsection headers.
 \renewcommand\subsection{%
  \@startsection{subsection}{2}{\z@}%
   {-3.25ex\@plus -1ex \@minus -.2ex}%
-  {1.5ex \@plus .2ex}%
+  {0.5ex \@plus .2ex}%
   {\normalfont\normalsize\bfseries}}
 
 % This gives formatting rules for subsubsection headers.
@@ -594,6 +677,34 @@
   {2.25ex \@plus1ex \@minus .2ex}%
   {-1em}%
   {\normalfont\normalfont}}
+
+
+%% ----- APPENDIX --------------------------------------------------------------
+% This sets the appendix style.
+% Note that this is different from the standard appendix usage.
+\renewcommand{\appendix}[1]{\section*{Appendix: #1}}
+
+
+%% ----- BIBILIOGRAPHY ---------------------------------------------------------
+% Save the original bibliography command.
+\let\@tex@bibliography\bibliography
+
+% Create a new command for the bibliography.
+\renewcommand*{\bibliography}[1]{ %
+ % Update the page format.
+ \if@aiaa@submit
+  % Switch to single spacing
+  \singlespacing %
+ \fi %
+ % Use a small font size.
+ \small %
+ % Create a pdf anchor.
+ \phantomsection %
+ % Add to table of contents.
+ \addcontentsline{toc}{chapter}{References} %
+ % Load the bibliography.
+ \@tex@bibliography{#1} %
+}
 
 
 %% ----- LINKS -----------------------------------------------------------------
@@ -633,20 +744,34 @@
 \fi
 
 
+%% ----- SET THE FONT SIZES ----------------------------------------------------
+% Change the base font size for journal papers.
+\if@q@compress
+ % 'compress' sizes and skips
+ \compresstitle
+ \compresssections
+ \smallfonts
+\else\if@aiaa@journal
+ % For journal, set font size to 9.
+ \journalfont
+\fi\fi
+
+
 
 %% ----- BEGIN DOCUMENT AREA ---------------------------------------------------
 % List of actions to take after the document has begun.
 \AtBeginDocument{ %
- % Commands for the 'submit' format.
+ % Commands for each format.
  \if@aiaa@submit %
   % 1.5-spaced lines
   \onehalfspacing %
- \fi %
+ \else\if@aiaa@journal
+  % Sloppy hyphenation
+  \sloppy
+ \fi\fi %
  % Set the PDF title.
  % We have to wait until here to make sure the user has set the title.
  \if@q@links
-  \hypersetup{
-   pdfstartview={FitH},
-   pdftitle=\inserttitle}
+  \hypersetup{pdftitle=\inserttitle}
  \fi
 }
