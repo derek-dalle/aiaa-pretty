@@ -707,6 +707,59 @@
 }
 
 
+%% ----- CODE ENVIRONMENT ------------------------------------------------------
+% This generates a 'code' environment that allows inline citations
+% of small snippets of code.
+\newenvironment{code} %
+ {\quote\small\verbatim} %
+ {\endverbatim\endquote}
+
+% Formatting commands
+% This command is used for names of files
+\newcommand{\tfile}[1]{{\footnotesize\textsf{#1}}}
+% This command puts a box around text that is meant for menu entries.
+\newcommand{\tmenu}[1]{\framebox[\width]{\ {\tiny\textsf{#1}}\ }}
+% This command is intended for names of variables within programs.
+\newcommand{\tvar}[1]{{\footnotesize\texttt{#1}}}
+% This command is used to display the contents of strings.
+% It automatically adds the correct, upright quotes around the argument.
+\newcommand{\tstring}[1]{ %
+ {\footnotesize\texttt{\textquotesingle#1\textquotesingle}}}
+% This command gives a bold version of the variable names.
+\newcommand{\tfunction}[1]{{\footnotesize\texttt{\textbf{#1}}}}
+
+%% ----- TEXT COMMANDS ---------------------------------------------------------
+% Command for 'and others'
+\newcommand{\etal}{\textit{et al.}}
+% Command for 'for example'
+\newcommand{\eg}{\textit{e.g.}}
+% Command for 'that is'
+\newcommand{\ie}{\textit{i.e.}}
+% Command for 'and the rest'
+\newcommand{\etc}{\textit{etc.}}
+
+% Short space
+\newcommand{\sspace}{\hspace{0.5em}}
+
+%% ----- NOMENCLATURE ENVIRONMENT ----------------------------------------------
+% New command for nomenclature environment
+\newenvironment{nomenclature}[1][]
+{ %
+ % Insert the title if present.
+ \ifthenelse{\equal{#1}{}}{ %
+  % Start the tabular environment.
+  \noindent\tabular{@{} p{3.5em} @{\hspace{2pt}=\hspace{1em}} l} %
+ }{ %
+ % Insert the title.
+ \noindent\textit{#1}\\[3pt] %
+ % Start the tabular environment.
+ \noindent\tabular{@{} p{3.5em} @{\hspace{2pt}=\hspace{1em}} l} %
+ }
+}{ %
+ % End the tabular environment
+ \endtabular %
+}
+
 %% ----- LINKS -----------------------------------------------------------------
 % Check if links should be loaded at all
 \if@q@links
