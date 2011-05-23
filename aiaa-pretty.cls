@@ -680,9 +680,8 @@
 
 
 %% ----- APPENDIX --------------------------------------------------------------
-% This sets the appendix style.
-% Note that this is different from the standard appendix usage.
-\renewcommand{\appendix}[1]{\section*{Appendix: #1}}
+% Actual coding for the AIAA-style appendices
+\newcommand{\aiaaappendix}[1]{\section*{Appendix: #1}}
 
 
 %% ----- BIBILIOGRAPHY ---------------------------------------------------------
