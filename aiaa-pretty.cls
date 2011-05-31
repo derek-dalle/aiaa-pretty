@@ -11,18 +11,33 @@
 %% -----------------------------------------------------------------------------
 %% IMPORTANT USE GUIDELINES:
 %%
+%% This document class works like the standard 'article' class except for the
+%% way it handles abstracts.  Rather than putting the text of the abstract in an
+%% environment, the user now specifies the text of the abstract as the argument
+%% of a command.
 %%
+%% Correct:
+%%
+%%   \abstract{This is a paper about ...}
+%%
+%% Incorrect:
+%%
+%%   \begin{abstract}
+%%      This is a paper about ...
+%%   \end{abstract}
+%%
+%% -----------------------------------------------------------------------------
 %% This provides a template for AIAA papers.
 %% 
 %% This software is released under the terms of the LaTeX Project Public
 %% License.  Copyright (C) 2004 by Bil Kleb, Bill Wood, and Erich Knausenberger.
-%% 
+%%
 %% Description: LaTeX package for AIAA papers.
 %% Keywords: LaTeX, class, AIAA, BibTeX, bibliographic-style
 %% Author (aiaa-pretty.cls): Derek Dalle
 %% Author (aiaa-tc.cls): Bil Kleb, Bill Wood, Erich Knausenberger
 %% Maintainer: Derek Dalle
-%% Version: 1.0 <19 Dec 2010>
+%% Version: 2.0 <25 May 2011>
 %%
 %% There are two installation options.
 %%
@@ -30,7 +45,7 @@
 %%      specify the relative path to this file from the .tex folder in the 
 %%      \documentclass line.  For example, if this file is in a directory one
 %%      level higher than your .tex file, you should use
-%%      \documentclass{../aiaa-dd}.
+%%      \documentclass{../aiaa-pretty}.
 %%
 %%   2. Alternately, you could put this file somewhere in your TeX distribution
 %%      directory.  If 'texmf' is the path to your main TeX distribution folder,
@@ -50,17 +65,27 @@
 %%
 %%  Class options:
 %%
+%%   backrefs   - using this option puts PDF links in the bibliography that
+%%                take the reader to the page(s) on which the reference is
+%%                used.
+%%
 %%   conference - used for hand carrying a paper to a 'loose papers'
 %%                conference.  It adds the conference name to the
 %%                top of the first page, paper number to the bottom
 %%                of each page, and a copyright notice on the bottom
 %%                of the first.
 %%
-%%   submit     - produces output typically required for journal submission,
-%%                i.e., 12pt font and 'double spacing'.
-%%
 %%   journal    - produces a style that attempts to replicate a typical
 %%                style found in an AIAA journal
+%%
+%%   plain      - this option removes any words or labels referring to to the
+%%                AIAA.  It is most convenient when you are preparing either
+%%                a draft or a paper for another agency.  You can also change
+%%                the label to something else using the command
+%%                     \footerlabel{NOT the AIAA}
+%%
+%%   submit     - produces output typically required for journal submission,
+%%                i.e., 12pt font and 'double spacing'.
 %%
 %%  Additional options specified in the \documentclass line will be passed 
 %%  to the article class.
@@ -223,6 +248,7 @@
 \RequirePackage{array}      % extra row height
 \RequirePackage{lastpage}   % to get reference for last page number
 \RequirePackage{fancyhdr}   % simple control of headers and footers
+\RequirePackage{multicol}   % package for multi-column nomenclature
 \RequirePackage{times}      % changes font to Times New Roman
 \RequirePackage{verbatim}   % New verbatim format
 \RequirePackage{textcomp}   % proper single quotes in verbatim
@@ -646,7 +672,7 @@
 % This gives formatting rules for section headers.
 \renewcommand\section{%
  \@startsection {section}{1}{\z@}%
-  {3.5ex \@plus -1ex \@minus -.2ex}%
+  {3.5ex \@plus 1ex \@minus -.2ex}%
   {1.0ex \@plus.2ex}%
   {\center\normalfont\large\bfseries}}
 
