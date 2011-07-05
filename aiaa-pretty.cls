@@ -321,18 +321,18 @@
 \newcounter{aiaa@cfootnote}
 % This command enables multiple authors to have the same footnote hook.
 \newcommand{\thanksibid}[1]{%
- \begingroup
-  % Store the current value of the footnote counter.
-  \setcounter{aiaa@cfootnote}{\value{footnote}} %
-  % Set the thanks counter to the argument
-  \setcounter{aiaa@cthanks}{#1} %
-  % Get the footnote symbol corresponding to above
-  \renewcommand\thefootnote{\fnsymbol{aiaa@cthanks}} %
-  % Make a footnote.
-  \footnotemark %
-  % Reset the footnote counter to the original value.
-  \setcounter{footnote}{\value{aiaa@cfootnote}} %
- \endgroup %
+\begingroup
+% Store the current value of the footnote counter.
+\setcounter{aiaa@cfootnote}{\value{footnote}}%
+% Set the thanks counter to the argument
+\setcounter{aiaa@cthanks}{#1}%
+% Get the footnote symbol corresponding to above
+\renewcommand\thefootnote{\fnsymbol{aiaa@cthanks}}%
+% Make a footnote.
+\footnotemark%
+% Reset the footnote counter to the original value.
+\setcounter{footnote}{\value{aiaa@cfootnote}}%
+\endgroup %
 }
 
 % Commands to insert the identifiers
@@ -347,6 +347,10 @@
 \renewcommand{\thesubfigure}{\alph{subfigure}}
 % This formats the actual label area for each subfigure.
 \renewcommand{\@thesubfigure}{\alph{subfigure})\hskip\subfiglabelskip}
+% This eliminates the parentheses around the sublabel in references.
+\renewcommand{\thesubtable}{\alph{subtable}}
+% This formats the actual label area for each subtable.
+\renewcommand{\@thesubtable}{\alph{subtable})\hskip\subfiglabelskip}
 
 % This sets the distance between a float and the paragraph.
 \setlength{\intextsep}{0.7\baselineskip \@plus 2\p@ \@minus 1\p@}
@@ -758,6 +762,10 @@
 \newcommand{\dd}[2]{\frac{d#1}{d#2}}
 % Command for Leibniz notation of partial derivatives
 \newcommand{\pd}[2]{\frac{\partial#1}{\partial#2}}
+% Command for norm
+\newcommand{\norm}[1]{\lVert#1\rVert}
+% Command for absolute value
+\newcommand{\abs}[1]{\lvert#1\rvert}
 
 
 %% ----- TEXT COMMANDS ---------------------------------------------------------
@@ -771,7 +779,7 @@
 \newcommand{\etc}{\textit{etc.}}
 
 % Short space
-\newcommand{\sspace}{\hspace{0.5em}}
+\newcommand{\sspace}{\hspace{0.18em}}
 
 %% ----- NOMENCLATURE ENVIRONMENT ----------------------------------------------
 % New command for nomenclature environment
