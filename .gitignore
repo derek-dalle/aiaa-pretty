@@ -1,0 +1,10 @@
+
+
+*.log
+*.aux
+*.out
+*.bak
+*.blg
+*.bbl
+*.brf
+*.zip
