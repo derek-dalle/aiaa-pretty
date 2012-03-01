@@ -684,7 +684,7 @@
 \renewcommand\subsection{%
  \@startsection{subsection}{2}{\z@}%
   {-3.25ex\@plus -1ex \@minus -.2ex}%
-  {0.5ex \@plus .2ex}%
+  {1.5ex \@plus .2ex}%
   {\normalfont\normalsize\bfseries}}
 
 % This gives formatting rules for subsubsection headers.
@@ -758,8 +758,10 @@
 \newcommand{\tfunction}[1]{{\footnotesize\texttt{\textbf{#1}}}}
 
 %% ----- MATH COMMANDS ---------------------------------------------------------
+% Command for differential d
+\newcommand{\diff}{\mathrm{d}}
 % Command for Leibniz notation of derivatives
-\newcommand{\dd}[2]{\frac{d#1}{d#2}}
+\newcommand{\dd}[2]{\frac{\diff#1}{\diff#2}}
 % Command for Leibniz notation of partial derivatives
 \newcommand{\pd}[2]{\frac{\partial#1}{\partial#2}}
 % Command for norm
@@ -780,6 +782,7 @@
 
 % Short space
 \newcommand{\sspace}{\hspace{0.18em}}
+
 
 %% ----- NOMENCLATURE ENVIRONMENT ----------------------------------------------
 % New command for nomenclature environment
