@@ -509,7 +509,11 @@
    % Insert the author.
    { %
     % Increase font size for all fields of author.
-    \large\sloppy %
+    \if@aiaa@journal %
+     \sloppy %
+    \else %
+     \large\sloppy %
+    \fi %
     % Insert author in a tabular environment.
     \hfill\begin{tabular}[t]{c}\insertauthor\end{tabular}\hfill
    } %
