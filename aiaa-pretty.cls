@@ -253,6 +253,7 @@
 \RequirePackage{verbatim}   % New verbatim format
 \RequirePackage{textcomp}   % proper single quotes in verbatim
 \RequirePackage{ifthen}     % logical structure
+\RequirePackage{cite}       % compresses list of citations
 \RequirePackage[BF,bf]{subfigure}     % subfigures
 \RequirePackage{amsmath}    % AMS packages
 \RequirePackage{amsfonts}
@@ -864,7 +865,7 @@
  % Commands for each format.
  \if@aiaa@submit %
   % 1.5-spaced lines
-  \onehalfspacing %
+  \doublespacing %
  \else\if@aiaa@journal
   % Sloppy hyphenation
   \sloppy
