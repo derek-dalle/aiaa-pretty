@@ -250,6 +250,7 @@
 \RequirePackage{fancyhdr}   % simple control of headers and footers
 \RequirePackage{multicol}   % package for multi-column nomenclature
 \RequirePackage{times}      % changes font to Times New Roman
+\RequirePackage{mathptmx}   % changes equation fonts
 \RequirePackage{verbatim}   % New verbatim format
 \RequirePackage{textcomp}   % proper single quotes in verbatim
 \RequirePackage{ifthen}     % logical structure
