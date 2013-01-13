@@ -1,6 +1,3 @@
-% I dedicate this template unto thee, Sara C. Spangelous.
-%
-%
 %%
 %% This is file `aiaa-pretty.cls'.  It is based off of aiaa-tc.cls, which was
 %% written by Bil Kleb, Bill Wood, and Erich Knauseberger.
@@ -250,7 +247,7 @@
 \RequirePackage{fancyhdr}   % simple control of headers and footers
 \RequirePackage{multicol}   % package for multi-column nomenclature
 \RequirePackage{times}      % changes font to Times New Roman
-\RequirePackage{mathptmx}   % changes equation fonts
+% \RequirePackage{mathptmx}   % changes equation fonts
 \RequirePackage{verbatim}   % New verbatim format
 \RequirePackage{textcomp}   % proper single quotes in verbatim
 \RequirePackage{ifthen}     % logical structure
@@ -776,15 +773,48 @@
 \newcommand{\abs}[1]{\lvert#1\rvert}
 
 
+%% ----- MATH FONTS ------------------------------------------------------------
+% Commands for changing the math mode to and from bold
+\newcommand\txmath{\mathversion{normal}}
+\renewcommand\boldmath{\mathversion{bold}}
+
+% Normal symbols
+\SetSymbolFont{letters}{normal}{OML}{txmi}{m}{it}
+\SetSymbolFont{letters}{bold}{OML}{txmi}{bx}{it}
+% Math operators
+\SetSymbolFont{operators}{normal}{OT1}{txr}{m}{n}
+\SetSymbolFont{operators}{bold}{OT1}{txr}{bx}{n}
+% Math symbols
+\SetSymbolFont{symbols}{normal}{OMS}{txsy}{m}{n}
+\SetSymbolFont{symbols}{bold}{OMS}{txsy}{bx}{n}
+% Large symbols
+\SetSymbolFont{largesymbols}{normal}{OMX}{txex}{m}{n}
+\SetSymbolFont{largesymbols}{bold}{OMX}{txex}{bx}{n}
+
+% Math alphabets, at most 16 families
+% Roman
+\SetMathAlphabet{\mathrm}{normal}{OT1}{txr}{m}{n}
+\SetMathAlphabet{\mathrm}{bold}{OT1}{txr}{bx}{n}
+% Italic
+\SetMathAlphabet{\mathit}{normal}{OT1}{txr}{m}{it}
+\SetMathAlphabet{\mathit}{bold}{OT1}{txr}{bx}{it}
+% Bold
+\SetMathAlphabet{\mathbf}{normal}{OT1}{txr}{bx}{n}
+\SetMathAlphabet{\mathbf}{bold}{OT1}{txr}{bx}{n}
+% Sans-serif
+\SetMathAlphabet{\mathsf}{normal}{OT1}{phv}{m}{n}
+\SetMathAlphabet{\mathsf}{bold}{OT1}{phv}{bx}{n}
+
+
 %% ----- TEXT COMMANDS ---------------------------------------------------------
 % Command for 'and others'
-\newcommand{\etal}{\textit{et al.}}
+\newcommand{\etal}{{et al.}}
 % Command for 'for example'
-\newcommand{\eg}{\textit{e.g.}}
+\newcommand{\eg}{{e.g.}}
 % Command for 'that is'
-\newcommand{\ie}{\textit{i.e.}}
+\newcommand{\ie}{{i.e.}}
 % Command for 'and the rest'
-\newcommand{\etc}{\textit{etc.}}
+\newcommand{\etc}{{etc.}}
 
 % Short space
 \newcommand{\sspace}{\hspace{0.18em}}
