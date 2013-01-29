@@ -9,44 +9,59 @@
 %% IMPORTANT USE GUIDELINES:
 %%
 %% This document class works like the standard 'article' class except for the
-%% way it handles abstracts.  Rather than putting the text of the abstract in an
-%% environment, the user now specifies the text of the abstract as the argument
-%% of a command.
+%% way it handles abstracts.  Rather than putting the text of the abstract in
+%% an environment, the user now specifies the text of the abstract as the
+%% argument of a command.
 %%
 %% Correct:
 %%
-%%   \abstract{This is a paper about ...}
+%%   \abstract{This is a paper about ...} ...
+%%   \maketitle
 %%
 %% Incorrect:
 %%
+%%   \maketitle
 %%   \begin{abstract}
 %%      This is a paper about ...
-%%   \end{abstract}
+%%   \end{abstract} ...
 %%
-%% -----------------------------------------------------------------------------
+%% To call this package, decalre it as the documentclass in the first line of
+%% your main .tex file.  There are three main options.
+%%
+%%   \documentclass[conference]{aiaa-pretty}
+%%   \documentclass[submit]{aiaa-pretty}
+%%   \documentclass[journal]{aiaa-pretty}
+%%
+%% The default is 'conference'.  Changing the format option allows the user to
+%% quickly switch the entire article from the conference format (single-column,
+%% single-spaced) to the journal submission format (single-column, large fonts,
+%% double-spaced) to a journal preview format (two-column, made to clone the
+%% AIAA journal publication format as closely as possible).
+%% ----------------------------------------------------------------------------
 %% This provides a template for AIAA papers.
 %% 
 %% This software is released under the terms of the LaTeX Project Public
-%% License.  Copyright (C) 2004 by Bil Kleb, Bill Wood, and Erich Knausenberger.
+%% License.  Copyright © 2004 by Bil Kleb, Bill Wood, and Erich
+%% Knausenberger.
 %%
 %% Description: LaTeX package for AIAA papers.
 %% Keywords: LaTeX, class, AIAA, BibTeX, bibliographic-style
 %% Author (aiaa-pretty.cls): Derek Dalle
 %% Author (aiaa-tc.cls): Bil Kleb, Bill Wood, Erich Knausenberger
 %% Maintainer: Derek Dalle
-%% Version: 2.0 <25 May 2011>
+%% Version: 1.0 <28 January 2013>
 %%
 %% There are two installation options.
 %%
-%%   1. Put this file in the same directory as your .tex file, or near it, and 
-%%      specify the relative path to this file from the .tex folder in the 
+%%   1. Put this file in the same directory as your .tex file, or near it, and
+%%      specify the relative path to this file from the .tex folder in the
 %%      \documentclass line.  For example, if this file is in a directory one
 %%      level higher than your .tex file, you should use
 %%      \documentclass{../aiaa-pretty}.
 %%
 %%   2. Alternately, you could put this file somewhere in your TeX distribution
-%%      directory.  If 'texmf' is the path to your main TeX distribution folder,
-%%      then a good recommendation is putting this file in 
+%%      directory.  If 'texmf' is the path to your main TeX distribution
+%%     folder, then a good recommendation is putting this file in
 %%      'texmf/tex/latex/aiaa/'.  This is the same directory that would contain
 %%      the aiaa-tc.cls file if it is installed.
 %%
@@ -60,78 +75,133 @@
 %%
 %%    \documentclass{aiaa-pretty}
 %%
-%%  Class options:
+%% ----------------------------------------------------------------------------
 %%
-%%   backrefs   - using this option puts PDF links in the bibliography that
-%%                take the reader to the page(s) on which the reference is
-%%                used.
+%%  CLASS OPTIONS:
 %%
-%%   conference - used for hand carrying a paper to a 'loose papers'
-%%                conference.  It adds the conference name to the
-%%                top of the first page, paper number to the bottom
-%%                of each page, and a copyright notice on the bottom
-%%                of the first.
+%%   backrefs       - using this option puts PDF links in the bibliography that
+%%                    take the reader to the page(s) on which the reference is
+%%                    used.
 %%
-%%   journal    - produces a style that attempts to replicate a typical
-%%                style found in an AIAA journal
+%%   conference     - used for formatting a conference paper
 %%
-%%   plain      - this option removes any words or labels referring to to the
-%%                AIAA.  It is most convenient when you are preparing either
-%%                a draft or a paper for another agency.  You can also change
-%%                the label to something else using the command
-%%                     \footerlabel{NOT the AIAA}
+%%   journal        - produces a style that attempts to replicate a typical
+%%                    style found in an AIAA journal
 %%
-%%   submit     - produces output typically required for journal submission,
-%%                i.e., 12pt font and 'double spacing'.
+%%   lastpage       - produces the number of pages in the footer of each page
+%%                    for the 'submit' and 'conference' formants [defaults to
+%%                    true]
+%%
+%%   lastpage=false - removes total number of pages from footer
+%%
+%%   lastpage=link  - makes the number of pages a link to the last page
+%%
+%%   links=bright   - changes links colors to default bright colors
+%%
+%%   links=false    - turns off links for citations and internal references
+%%
+%%   links=plain    - leaves link functionality on for all references and
+%%                    citations but makes all links black
+%%
+%%   plain          - this option removes any words or labels referring to to
+%%                    the AIAA.  It is most convenient when you are preparing
+%%                    either a draft or a paper for another agency.  You can
+%%                    also change the label to something else using the command
+%%                    \footerlabel{NOT the AIAA}
+%%
+%%   submit        - produces output typically required for journal submission,
+%%                   i.e., 12pt font and 'double spacing'.
 %%
 %%  Additional options specified in the \documentclass line will be passed 
 %%  to the article class.
 %%
-%%  Class-specific commands:
+%% ----------------------------------------------------------------------------
 %%
-%%   \thanksibid{} - Reuses \thanks footnote symbol from previous
-%%                   author specified by position in \author command.
-%%                   For example, `someone\thanksibid{2}' will reuse the
-%%                   footnote symbol from the second author for 'someone'
-%%                   without producing a repeated footnote at the bottom.
+%%  CLASS-SPECIFIC COMMANDS:
 %%
-%%   \AIAAauthor[short info]{full names, etc.}
-%%                      - New method for specifying author information.
-%%                        The old \author{names, etc.} is still functional,
-%%                        but the headers for the 'journal' option will not
-%%                        contain the authors' last names.
+%%  \thanksibid{}
+%%     Reuses \thanks footnote symbol from previous author specified by
+%%     position in \author command.  For example, 'someone\thanksibid{2}' will
+%%     reuse the footnote symbol from the second author for 'someone' without
+%%     producing a repeated footnote at the bottom.
 %%
-%%   \AIAAabstract{text of abstract}
-%%                      - New method of entering abstract.  The old
-%%                        \begin{abstract}... text ... \end{abstract} method
-%%                        is still functional, but the abstract will be in
-%%                        one column when using the 'journal' option, which
-%%                        match the AIAA journal formatting.  Make sure to
-%%                        use this command BEFORE the \maketitle line.
+%%  \author{full names, etc.}
+%%  \author[last names]{full names, etc.}
+%%     The \author command has been customized for this class.  It allows the
+%%     user the author in the usual way and define a shortened version (such as
+%%     'Davis, Thompson, and Li') that will be used in the header of nontitle
+%%     pages if the 'journal' option is selected.
 %%
-%%   \AIAApapernumber{} - Inserts number of AIAA paper.  For use with the
-%%                        'conference' option.
+%%  \abstract{text of abstract}
+%%     New method of entering abstract.  Do not try to use the abstract
+%%     environment because it will not work with the two-column format in the
+%%     correct way.  Make sure to use this command BEFORE the \maketitle line.
 %%
-%%    \AIAAconference{} - Inserts the name of the conference.  For use with
-%%                        the 'conference' option.
+%%  \title{title}
+%%     The \title command was redefined for this work.  Its usage has not
+%%     changed, but this may cause conflicts with other packages.
 %%
-%%       \AIAAjournal{} - Inserts the name of the journal.  For use with the
-%%                        'journal' option.
+%%  \journal{Name of Journal}
+%%     If this command is used, the name of the journal will be placed on the
+%%     top left corner of the first page.  It will be formatted in small caps.
 %%
-%%     \AIAAcopyright{} - Inserts copyright info on bottom of first page
-%%                        when used with 'conference' option.  Must be filled
-%%                        with one of the various copyright types:
-%%                          \AIAAcopyrightA{year},
-%%                          \AIAAcopyrightB{year}{holder},
-%%                          \AIAAcopyrightC,
-%%                          \AIAAcopyrightD{year}, or
-%%                          \AIAAcopyrightDAPL{year}.
+%%  \volume{Vol.~M, No.~N}
+%%     If this command is used and the 'journal' option is selected, the text
+%%     entered in the command area will be displayed on a line below the name
+%%     of the journal on the top left corner of the first page.
 %%
-%%   \AIAAsubmitinfo{} - Footer information used by 'submit' option.
+%%  \doi{10.2514/madeup2.3}
+%%     If this command is used, the DOI number will be placed between the
+%%     author and the abstract.  Do not put the letters DOI in the command as
+%%     those are inserted automatically.
+%%
+%%  \firstpage{342}
+%%     If your article is published as part of a journal or some other sort of
+%%     inpublication, this command can be used to set the number of the first
+%%     page of your document.
+%%
+%%  \conference{Name of Conference\\Location}
+%%     Insert the name of the conference in this command.  It will put the name
+%%     of the conference in the upper left corner of the first page in bold
+%%     sans-serif font if the 'journal' option is selected.  This is to display
+%%     the relevant information for personal purposes.
+%%
+%%  \papernumber{AIAA 2013-XXXX}
+%%     Insert the AIAA paper number with this command.  It will appear on the
+%%     top right of the first page if the 'journal' option is selected.
+%%
+%%  \copyright{Submitted ... Copyright \textcopyright the authors...}
+%%     Insert the copyright information here.  It will appear before the author
+%%     footnotes on the first page.
+%%
+%% ----------------------------------------------------------------------------
+%%
+%%  ADDITIONAL INFORMATION:
+%%
+%%  ** Captions and \boldmath **
+%%   By default, AIAA formats its captions in bold fonts.  This template
+%%   formats all captions in bold fonts automatically, but the formatting of
+%%   math in captions looks out of place as a result.  This package has set
+%%   things up so that \caption{\boldmath{$A_3^2$}} will work properly.  Normal
+%%   symbols will be bold and italic.  Bold symbols will not change appearance.
+%%
+%%  ** Page numbering of conference papers **
+%%   The first page of a conference paper no longer receives a label for its
+%%   page number.  The reason for this is that the copyright information
+%%   printed by AIAA after submission always ends up on top of where the page
+%%   number would be.
+%%
+%%  ** Additional \AIAAsomething commands **
+%%   The class-specific commands described above may come into conflict with
+%%   other packages or complex tasks you wish to perform.  If something causes
+%%   one of the commands above to malfunction, you may try using an alternative
+%%   command that has the same function.  For example if the command '\volume'
+%%   is needed for some other purpose, try using '\AIAAvolume' to maintaing
+%%   the functionality intended for this class.
 %%
 %%
 
-%% ----- INITIAL DEFINITIONS ---------------------------------------------------
+%% ----- INITIAL DEFINITIONS --------------------------------------------------
 % This prevents the compiler from running on old versions of LaTeX.
 \NeedsTeXFormat{LaTeX2e}
 
@@ -139,7 +209,7 @@
 \ProvidesClass{aiaa-pretty}[2010/01/10 v2.0 AIAA paper]
 
 
-%% ----- OPTIONS ---------------------------------------------------------------
+%% ----- OPTIONS --------------------------------------------------------------
 % LaTeX help: logical variables
 % Create a new logical variable using
 %   \newif\if@something
@@ -162,6 +232,10 @@
 \newif\if@q@copyright
 \newif\if@q@papernumber
 \newif\if@q@conference
+\newif\if@q@journal
+\newif\if@q@volume
+\newif\if@q@doi
+\newif\if@q@firstpage
 \newif\if@q@lastpage
 \newif\if@q@lastpage@link
 
@@ -210,7 +284,7 @@
 \ProcessOptions
 
 
-%% ----- DOCUMENT FORMAT -------------------------------------------------------
+%% ----- DOCUMENT FORMAT ------------------------------------------------------
 % This control structure calls the basic LaTeX article.cls class.
 \if@aiaa@submit
  % Submit class: large font and spacing in single column
@@ -239,7 +313,7 @@
 \fi
 
 
-%% ----- PACKGAGES -------------------------------------------------------------
+%% ----- PACKGAGES ------------------------------------------------------------
 % This section tells LaTeX to call a bunch of other packages.
 \RequirePackage{graphicx}   % images
 \RequirePackage{array}      % extra row height
@@ -247,7 +321,6 @@
 \RequirePackage{fancyhdr}   % simple control of headers and footers
 \RequirePackage{multicol}   % package for multi-column nomenclature
 \RequirePackage{times}      % changes font to Times New Roman
-% \RequirePackage{mathptmx}   % changes equation fonts
 \RequirePackage{verbatim}   % New verbatim format
 \RequirePackage{textcomp}   % proper single quotes in verbatim
 \RequirePackage{ifthen}     % logical structure
@@ -263,7 +336,7 @@
 \if@aiaa@journal\RequirePackage{abstract}\fi
 
 
-%% ----- IDENTIFIERS AND ABSTRACT ----------------------------------------------
+%% ----- IDENTIFIERS AND ABSTRACT ---------------------------------------------
 % Variables that hold the value of various identifiers.
 \renewcommand{\@author}{}
 \newcommand{\@shortauthor}{}
@@ -272,7 +345,11 @@
 \newcommand{\@copyright}{}
 \newcommand{\@submitinfo}{}
 \newcommand{\@conference}{}
+\newcommand{\@papernumber}{}
 \newcommand{\@journal}{}
+\newcommand{\@volume}{}
+\newcommand{\@doi}{}
+\newcommand{\@firstpage}{}
 
 % New author command
 \renewcommand*{\author}[2][]{ %
@@ -309,11 +386,58 @@
 % Legacy command
 \let\AIAAtitle\title
 
+% New journal command
+\newcommand{\journal}[1]{
+ \renewcommand{\@journal}{#1}
+ \@q@journaltrue}
+% Legacy command
+\let\AIAAjournal\journal
+
+% New volume number command
+\newcommand{\volume}[1]{
+ \renewcommand{\@volume}{#1}
+ \@q@volumetrue}
+% Legacy command
+\let\AIAAvolume\volume
+
+% New volume number command
+\newcommand{\conference}[1]{
+ \renewcommand{\@conference}{#1}
+ \@q@conferencetrue}
+% Legacy command
+\let\AIAAconference\conference
+
+% New volume number command
+\newcommand{\papernumber}[1]{
+ \renewcommand{\@papernumber}{#1}
+ \@q@papernumbertrue}
+% Legacy command
+\let\AIAApapernumber\papernumber
+
+% New volume number command
+\newcommand{\doi}[1]{
+ \renewcommand{\@doi}{#1}
+ \@q@doitrue}
+% Legacy command
+\let\AIAAvolume\volume
+
 % New abstract command
 \renewcommand{\abstract}[1]{
  \renewcommand{\@abstract}{#1}\@q@abstracttrue}
 % Legacy command
 \let\AIAAabstract\abstract
+
+% New abstract command
+\renewcommand{\copyright}[1]{
+ \renewcommand{\@copyright}{#1}\@q@copyrighttrue}
+% Legacy command
+\let\AIAAcopyright\copyright
+
+% Command to set the first page number
+\newcommand{\firstpage}[1]{
+ \renewcommand{\@firstpage}{#1}\@q@firstpagetrue}
+% Legacy command
+\let\AIAAfirstpage\firstpage
 
 % These are counters for the author affiliations.
 \newcounter{aiaa@cthanks}
@@ -341,7 +465,7 @@
 \newcommand{\insertabstract}{\@abstract}
 
 
-%% ----- FLOATS ----------------------------------------------------------------
+%% ----- FLOATS ---------------------------------------------------------------
 % This eliminates the parentheses around the sublabel in references.
 \renewcommand{\thesubfigure}{\alph{subfigure}}
 % This formats the actual label area for each subfigure.
@@ -376,13 +500,14 @@
  \vskip\belowcaptionskip}
  
 
-%% ----- LENGTHS AND SIZES -----------------------------------------------------
+%% ----- LENGTHS AND SIZES ----------------------------------------------------
 % Vertical spaces for the title area
 \newlength{\toptitleskip}
 \newlength{\titleauthorskip}
 \newlength{\titleabstractskip}
 \newlength{\authorabstractskip}
 \newlength{\titletextskip}
+\newlength{\doiskip}
 
 % Set the lengths of the title area skips
 \setlength{\toptitleskip}{1ex}
@@ -390,6 +515,7 @@
 \setlength{\titleabstractskip}{5ex}
 \setlength{\authorabstractskip}{5ex}
 \setlength{\titletextskip}{5ex plus 2pt minus 3pt}
+\setlength{\doiskip}{2ex plus 2pt minus 2pt}
 
 % Command to make the skips in the title area smaller.
 \newcommand{\compresstitle}{ %
@@ -446,6 +572,11 @@
    \parsep 2\p@ \@plus\p@ \@minus\p@
    \itemsep \parsep} %
  }
+ % The large size needs tweaking, too
+ \renewcommand\large{%
+  % Decrease the font size to 8pt.
+  \@setfontsize\large\@xpt{9.5}%
+ }
 }
 
 % Command to set the font size to 9 with tight spacing
@@ -481,7 +612,7 @@
 }
 
 
-%% ----- TITLE AREA ------------------------------------------------------------
+%% ----- TITLE AREA -----------------------------------------------------------
 \newcommand{\tskrp}{5ex}
 %\setlength\titleauthorskip{12ex plus 2pt minus 3pt}
 
@@ -497,6 +628,19 @@
   \vskip\toptitleskip %
   % Set the footnote command equal to the thanks command.
   \let\footnote\thanks %
+  % Check for copyright information.
+  \if@q@copyright %
+   % Isolate markerless footnotes.
+   \begingroup %
+   % Blank out the footnote symbol.
+   \renewcommand{\thefootnote}{} %
+   % Reset the counter.
+   \addtocounter{footnote}{-1} %
+   % Make the footnote.
+   \footnote{\@copyright} %
+   % End the group.
+   \endgroup %
+  \fi %
   % Check for a title
   \if@q@title %
    {\LARGE \bfseries \inserttitle} %
@@ -508,25 +652,31 @@
    % Insert the author.
    { %
     % Increase font size for all fields of author.
-    \if@aiaa@journal %
-     \sloppy %
-    \else %
-     \large\sloppy %
-    \fi %
+    \large\sloppy %
     % Insert author in a tabular environment.
     \hfill\begin{tabular}[t]{c}\insertauthor\end{tabular}\hfill
    } %
   \fi %
+  % Check for a DOI
+  \if@q@doi
+   % Vertical space
+   \vskip\doiskip %
+   % Insert the DOI
+   DOI:~\@doi
+  \fi
   % Check for an abstract.
   \if@q@abstract %
    % Check which gap to insert above.
-   \if@q@author %
+   \if@q@doi %
+    % DOI skip
+    \vskip\doiskip %
+   \else\if@q@author %
     % Author-to-abstract skip
     \vskip\authorabstractskip %
    \else\if@q@title %
     % Title-to-abstract skip
     \vskip\titleabstractkip %
-   \fi\fi %
+   \fi\fi\fi %
    % Insert the abstract
    \begin{minipage}{13.5cm} %
     \bfseries \small \insertabstract %
@@ -561,13 +711,17 @@
   \saythanks %
   % Reset the footnote style.
   \renewcommand\thefootnote{\@alph\c@footnote}}
-\else
+\else %
+ % Special option for conference papers
+ \if@aiaa@conference %
+  \thispagestyle{plain} %
+ \fi %
  % Insert the title area as part of the whole one-column document.
  \renewcommand{\maketitle}{\@maketitle}
 \fi
 
 
-%% ----- HEADER AND FOOTER -----------------------------------------------------
+%% ----- HEADER AND FOOTER ----------------------------------------------------
 % Whether or not there is a footer label to show
 \newif\if@q@footer@label
 % Commands to hide or show footer label
@@ -632,7 +786,25 @@
   % First clear out the regular page style
   \fancyhf{} %
   % Put the title of the journal in the upper left.
-  \fancyhead[L]{\scshape\@journal} %
+  \fancyhead[L]{ %
+  % Check for a journal
+  \if@q@journal %
+   % Insert the journal.
+   {\scshape\@journal} %
+   % Check for a volume number.
+   \if@q@volume\\\@volume\fi %
+  \else\if@q@conference %
+   % Inert the conference name.
+   {\sffamily\bfseries\@conference} %
+  \fi\fi %
+  } %
+  % Check for an AIAA Paper number.
+  \if@q@papernumber %
+   % Top right of first page.
+   \fancyhead[R]{ %
+    % Large, sans-serif, and bold
+    {\sffamily\bfseries\Large{\@papernumber}}} %
+  \fi %
   % Put the page number (1) in the bottom center
   \fancyfoot[C]{\thepage}} %
  % Clear the page style for all other pages.
@@ -642,6 +814,11 @@
  % Authors' last names on top center
  \fancyhead[CE,CO]{\footnotesize\MakeUppercase{\insertshortauthor}}
 \else
+ % Special option for conference papers.
+ \if@aiaa@conference %
+  % This will make the first page not appear with any page number.
+  \fancypagestyle{plain}{\fancyhf{}} %
+ \fi
  % This clears out the regular page style.
  \fancyhf{} %
  % This turns off the line at the top of pages.
@@ -664,7 +841,7 @@
 \pagestyle{fancy}
 
 
-%% ----- SECTION HEADERS -------------------------------------------------------
+%% ----- SECTION HEADERS ------------------------------------------------------
 % Update section numbering.
 \renewcommand\thesection      {\@Roman\c@section}
 \renewcommand\thesubsection   {\@Alph\c@subsection}
@@ -679,8 +856,8 @@
 % This gives formatting rules for section headers.
 \renewcommand\section{%
  \@startsection {section}{1}{\z@}%
-  {3.5ex \@plus 1ex \@minus -.2ex}%
-  {1.0ex \@plus.2ex}%
+  {-2.25ex \@plus 1ex \@minus -.2ex}%
+  {1.0ex \@plus .2ex}%
   {\center\normalfont\large\bfseries}}
 
 % This gives formatting rules for subsection headers.
@@ -712,12 +889,12 @@
   {\normalfont\normalfont}}
 
 
-%% ----- APPENDIX --------------------------------------------------------------
+%% ----- APPENDIX -------------------------------------------------------------
 % Actual coding for the AIAA-style appendices
 \newcommand{\aiaaappendix}[1]{\section*{Appendix: #1}}
 
 
-%% ----- BIBILIOGRAPHY ---------------------------------------------------------
+%% ----- BIBILIOGRAPHY --------------------------------------------------------
 % Save the original bibliography command.
 \let\@tex@bibliography\bibliography
 
@@ -739,7 +916,7 @@
 }
 
 
-%% ----- CODE ENVIRONMENT ------------------------------------------------------
+%% ----- CODE ENVIRONMENT -----------------------------------------------------
 % This generates a 'code' environment that allows inline citations
 % of small snippets of code.
 \newenvironment{code} %
@@ -760,7 +937,8 @@
 % This command gives a bold version of the variable names.
 \newcommand{\tfunction}[1]{{\footnotesize\texttt{\textbf{#1}}}}
 
-%% ----- MATH COMMANDS ---------------------------------------------------------
+
+%% ----- MATH COMMANDS --------------------------------------------------------
 % Command for differential d
 \newcommand{\diff}{\mathrm{d}}
 % Command for Leibniz notation of derivatives
@@ -773,7 +951,7 @@
 \newcommand{\abs}[1]{\lvert#1\rvert}
 
 
-%% ----- MATH FONTS ------------------------------------------------------------
+%% ----- MATH FONTS -----------------------------------------------------------
 % Commands for changing the math mode to and from bold
 \newcommand\txmath{\mathversion{normal}}
 \renewcommand\boldmath{\mathversion{bold}}
@@ -806,7 +984,7 @@
 \SetMathAlphabet{\mathsf}{bold}{OT1}{phv}{bx}{n}
 
 
-%% ----- TEXT COMMANDS ---------------------------------------------------------
+%% ----- TEXT COMMANDS --------------------------------------------------------
 % Command for 'and others'
 \newcommand{\etal}{{et al.}}
 % Command for 'for example'
@@ -820,7 +998,7 @@
 \newcommand{\sspace}{\hspace{0.18em}}
 
 
-%% ----- NOMENCLATURE ENVIRONMENT ----------------------------------------------
+%% ----- NOMENCLATURE ENVIRONMENT ---------------------------------------------
 % New command for nomenclature environment
 \newenvironment{nomenclature}[1][]
 { %
@@ -839,7 +1017,7 @@
  \endtabular %
 }
 
-%% ----- LINKS -----------------------------------------------------------------
+%% ----- LINKS ----------------------------------------------------------------
 % Check if links should be loaded at all
 \if@q@links
  % Load the link package.
@@ -876,7 +1054,7 @@
 \fi
 
 
-%% ----- SET THE FONT SIZES ----------------------------------------------------
+%% ----- SET THE FONT SIZES ---------------------------------------------------
 % Change the base font size for journal papers.
 \if@q@compress
  % 'compress' sizes and skips
@@ -890,9 +1068,13 @@
 
 
 
-%% ----- BEGIN DOCUMENT AREA ---------------------------------------------------
+%% ----- BEGIN DOCUMENT AREA --------------------------------------------------
 % List of actions to take after the document has begun.
 \AtBeginDocument{ %
+ % Check for a first page number (other than 1)
+ \if@q@firstpage %
+  \setcounter{page}{\@firstpage} %
+ \fi %
  % Commands for each format.
  \if@aiaa@submit %
   % 1.5-spaced lines

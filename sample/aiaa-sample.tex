@@ -1,5 +1,5 @@
 % Use the temporary template.
-\documentclass{../aiaa-pretty}
+\documentclass[conference]{../aiaa-pretty}
 
 % Author information
 \author[Hastings, Dohnson, and Brooks]{ %
@@ -15,6 +15,26 @@ Geromie R. Brooks\thanks{Professor, Department of Aerospace Engineering, AIAA Fe
  \abstract{ %
   This paper demonstrates the use of a particular template.  In the mean time, it discusses algorithms to solve nonlinear equations of a single variable.  This is a subject that lends itself well to simple equations and the use of a few figures and tables.  This should be enough to demonstrate the main features of this package using a small number of pages.}
 
+% Conference name
+% NOTE: This will not appear unless the 'journal' option is selected.
+% NOTE: This will not appear if a journal is specified
+\conference{nth Conference on Artificial Progress\\
+24 July 1687, Jacksonburg, Wasington}
+% NOTE: This will not appear unless the 'journal' option is selected.
+% Paper number that couldn't exist
+\papernumber{AIAA 1687-45A2}
+
+% Journal name
+\journal{Journal of Anachronistic Computers}
+
+% Volume
+\volume{Vol.~0, No.~0, June--July}
+
+% DOI
+\doi{10.2514/6.1687-45A2}
+
+% Copyright
+\copyright{Copyright \textcopyright 2012 by Derek J.~Dalle}
 
 % Begin the document
 \begin{document}
@@ -81,7 +101,7 @@ Figure \ref{fig:f:tol} gives a visualization for the uncertainty in both axes fo
  \centering
  \includegraphics[width=3in]{./pics/f1_tol.pdf}
  \caption{ \label{fig:f:tol}
-  Residuals in $x$- and $y$-directions}
+  Residuals in \boldmath{$x$}- and \boldmath{$y$}-directions}
 \end{figure}
 
 
